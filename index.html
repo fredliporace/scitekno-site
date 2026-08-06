@@ -1,1 +1,236 @@
-<h1>SCITEKNO — coming soon</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCITEKNO — Earth observation & cloud infrastructure</title>
+<meta name="description" content="SCITEKNO Serviços em Informática — satellite image processing pipelines and cloud infrastructure for Earth observation ground segments.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A0F1C;
+    --bg-panel: #0F1526;
+    --text: #E8ECF4;
+    --text-muted: #7C8AA3;
+    --accent: #4FA8E0;
+    --accent-dim: rgba(79,168,224,0.35);
+    --live: #6FE0B8;
+    --rule: rgba(124,138,163,0.18);
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin:0;
+    padding:0;
+    background: var(--bg);
+    color: var(--text);
+    height:100%;
+  }
+
+  body{
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(79,168,224,0.10), transparent 60%),
+      var(--bg);
+  }
+
+  a{ color: var(--accent); text-decoration: none; }
+  a:hover{ text-decoration: underline; }
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  main{
+    flex: 1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 6rem 1.5rem 3rem;
+  }
+
+  .eyebrow{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.75rem;
+  }
+
+  .eyebrow .dot{
+    display:inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--live);
+    margin: 0 0.6em;
+    box-shadow: 0 0 8px 1px rgba(111,224,184,0.6);
+  }
+
+  h1{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.6rem, 8vw, 5rem);
+    letter-spacing: -0.01em;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .tagline{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 400;
+    font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+    color: var(--accent);
+    margin: 0.9rem 0 0;
+  }
+
+  /* orbital ground-track signature element */
+  .orbit-wrap{
+    width: min(560px, 90vw);
+    margin: 3rem 0 2.75rem;
+  }
+
+  .orbit-wrap svg{ width:100%; height:auto; display:block; overflow: visible; }
+
+  .orbit-path{
+    fill:none;
+    stroke: var(--rule);
+    stroke-width: 1;
+  }
+
+  .satellite{
+    fill: var(--accent);
+    filter: drop-shadow(0 0 4px var(--accent-dim));
+  }
+
+  .satellite-anim{
+    offset-path: path('M 10,40 C 130,-10 390,-10 510,40');
+    animation: transit 9s linear infinite;
+  }
+
+  @keyframes transit{
+    0%   { offset-distance: 0%; }
+    100% { offset-distance: 100%; }
+  }
+
+  p.lead{
+    max-width: 34rem;
+    color: var(--text-muted);
+    font-size: 1.02rem;
+    line-height: 1.65;
+    margin: 0 auto;
+  }
+
+  p.lead strong{ color: var(--text); font-weight: 500; }
+
+  .status{
+    margin-top: 3rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    display:flex;
+    align-items:center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    justify-content:center;
+  }
+
+  .status-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:0.5em;
+    padding: 0.4em 0.85em;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    color: var(--text-muted);
+  }
+
+  .status-badge .dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--live);
+    box-shadow: 0 0 8px 1px rgba(111,224,184,0.6);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pulse{
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  footer{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    text-align:center;
+    padding: 1.75rem 1.5rem 2.25rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  footer .row{
+    display:flex;
+    justify-content:center;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .satellite-anim{ animation: none; offset-distance: 45%; }
+    .status-badge .dot{ animation: none; }
+  }
+
+  @media (max-width: 480px){
+    main{ padding: 4rem 1.25rem 2.5rem; }
+    footer .row{ gap: 1rem; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <div class="eyebrow">SCITEKNO<span class="dot"></span>EARTH OBSERVATION &amp; CLOUD INFRASTRUCTURE</div>
+
+  <h1>SCITEKNO</h1>
+  <p class="tagline">From orbit to insight, in scale</p>
+
+  <div class="orbit-wrap" aria-hidden="true">
+    <svg viewBox="0 0 520 60">
+      <path class="orbit-path" d="M 10,40 C 130,-10 390,-10 510,40"></path>
+      <circle class="satellite satellite-anim" r="4"></circle>
+    </svg>
+  </div>
+
+  <p class="lead">
+    <strong>SCITEKNO</strong> builds satellite image
+    processing pipelines and cloud infrastructure
+    for Earth observation ground segments, with strong
+    focus on image quality assessment — from raw downlink to
+    analysis-ready data.
+  </p>
+
+  <div class="status">
+    <span class="status-badge"><span class="dot"></span>Site in development</span>
+    <span>·</span>
+    <span>Reach us at <a href="mailto:contact@scitekno.com.br">contact@scitekno.com.br</a></span>
+  </div>
+</main>
+
+<footer>
+  <div class="row">
+    <span>SCITEKNO SERVIÇOS EM INFORMÁTICA</span>
+    <span>RIO DE JANEIRO, BR · 22.9068°S 43.1729°W</span>
+  </div>
+</footer>
+
+</body>
+</html>

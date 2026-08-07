@@ -190,4 +190,33 @@
     main{ padding: 4rem 1.25rem 2.5rem; }
     footer .row{ gap: 1rem; flex-direction: column; }
   }
+
+  .lang-switcher{
+    display:inline-flex;
+    align-items:center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+  }
+
+  .lang-switcher a{
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .lang-switcher a:hover{
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .lang-active{
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .lang-sep{
+    color: var(--rule);
+  }
 </style>

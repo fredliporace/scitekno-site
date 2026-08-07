@@ -1,0 +1,16 @@
+title: SCITEKNO
+description: SCITEKNO — satellite image processing pipelines and cloud infrastructure for Earth observation ground segments.
+url: "https://scitekno.com.br"
+baseurl: ""
+lang: en
+languages:
+  - en
+  - pt-BR
+default_lang: en
+exclude_from_localization:
+  - assets
+  - images
+  - css
+  - CNAME
+plugins:
+  - jekyll-polyglot

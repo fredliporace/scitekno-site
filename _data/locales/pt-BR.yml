@@ -1,0 +1,9 @@
+# Português (pt-BR) — página "em breve" da SCITEKNO.
+# Lido nos _includes via: {% assign t = site.data.locales[page.lang] %}
+eyebrow_sub: "OBSERVAÇÃO DA TERRA E INFRAESTRUTURA EM NUVEM"
+tagline: "Da órbita ao insight, em escala"
+lead: "A <strong>SCITEKNO</strong> desenvolve pipelines de processamento de imagens de satélite e infraestrutura em nuvem para segmentos terrestres de observação da Terra, com forte foco em avaliação de qualidade de imagem — do downlink bruto aos dados prontos para análise."
+status_badge: "Site em desenvolvimento"
+status_reach_us: "Fale conosco"
+footer_entity: "SCITEKNO SERVIÇOS EM INFORMÁTICA"
+footer_location: "RIO DE JANEIRO, BR · 22.9068°S 43.1729°W"

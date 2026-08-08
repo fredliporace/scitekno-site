@@ -1,78 +1,77 @@
 # SCITEKNO Site — Development Rules (Jekyll + GitHub Pages)
 
 ## Build & preview
+
 - Always use Bundler: `bundle install`, then
   `bundle exec jekyll serve --livereload --host 0.0.0.0 --port 4000` (port 4000 forwarded).
 - Never run `jekyll`/`gem` with `sudo`; use the devcontainer.
 - Do not hand-edit `Gemfile.lock`; regenerate via `bundle install`/`bundle update`.
+- After any plugin/routing/migration change (e.g. swapping the i18n approach, adding the pt-BR
+  route), **restart the server from a clean build**: stop the running server, then run
+  `rm -rf _site` before `bundle exec jekyll serve --livereload --host 0.0.0.0 --port 4000`.
+  Watch-mode regeneration does NOT delete orphaned files from `_site`, so stale output (e.g.
+  leftover localized subdirs from an old i18n setup) can linger and produce wrong URLs or
+  directory listings instead of the page.
 
 ## GitHub Pages / deploy constraints
-- This site uses **Polyglot + GitHub Actions** for deployment. Native GitHub Pages push-to-deploy
-  is disabled. Do NOT rely on it.
-- Keep `_config.yml` valid YAML; set `title`, `description`, `url`, `baseurl`.
-  With custom domain `CNAME` = scitekno.com.br, `baseurl` is normally `""` unless served from a subpath.
-- Test locally (`bundle exec jekyll build`) with no warnings/errors before pushing.
+
+- This site deploys via **native GitHub Pages push-to-deploy** (no Actions workflow).
+  Settings → Pages → Build and deployment → Source: **Deploy from a branch** → `main` → `/root`.
+- The `CNAME` file at the repo root sets the custom domain `scitekno.com.br`; with a custom
+  domain `baseurl` is normally `""` unless the site is later served from a subpath.
+- Only the `github-pages` gem is used (Jekyll pinned to 3.10.0). **Do NOT add plugins that
+  GitHub Pages does not allow-list** — the native build cannot load them.
+- To reproduce production output locally, run `bundle exec jekyll build` after a clean
+  `bundle install`; keep the local Gemfile in sync with what GitHub Pages provides so local
+  and deployed environments match (this avoids `Liquid syntax error: Unknown tag` failures).
 
 ## Source organization (Jekyll conventions)
+
 - Pages in root or `_pages/`; layouts in `_layouts/`, partials in `_includes/`,
   structured data in `_data/` (`.yml`/`.yaml`).
 - Use `{% include %}` for header/footer/nav; avoid duplicating markup.
 - Put reusable CSS in `assets/css/main.scss` or the layout, NOT inline per page.
-  The current `index.html` keeps CSS inline only as a temporary coming-soon page.
 - Keep markdown content in `.md` files with front matter; let Jekyll render it.
 
-## Home page — output parity (HARD CONSTRAINT)
-- The existing `index.html` (236 lines, hand-written coming-soon page) is the **reference output**.
-  Its content and structure must not change.
-- The Jekyll source (`index.md` + `_layouts/default.html` + `_includes/*`) must render to
-  `_site/index.html` that is **structurally and visually identical** to the reference `index.html`.
-  In other words: `index.md` is built "backwards" — the Jekyll pipeline's job is to reproduce the
-  current static page exactly, then grow from there.
-- Migration order (must preserve output at each step):
-  1. Start with the reference `index.html` as the correctness baseline.
-  2. Extract the shared shell (doctype, `<head>` with fonts, `<body>` open/close, `<footer>`) into
-     `_layouts/default.html` and `_includes/header.html` / `_includes/footer.html`.
-  3. Move the inline `<style>` block into `assets/css/main.scss` (or keep in layout `<head>` if
-     scoped to this page only); update the layout to load it.
-  4. Create `index.md` with front matter `layout: default` and the `<main>` content from the
-     reference page.
-  5. Run `bundle exec jekyll build` and diff `_site/index.html` against the reference `index.html`.
-     The diff must be empty (or limited to insignificant whitespace/quoting). Do not proceed until
-     parity is confirmed.
-  6. Once parity is confirmed, the reference `index.html` may be removed or kept as a snapshot;
-     the Jekyll-rendered version is canonical.
-- Do NOT leave a hand-written `index.html` alongside a Jekyll-rendered one after migration — that
-  causes ambiguity about which is canonical.
+## i18n — data-driven, plugin-free (HARD CONSTRAINT)
 
-## Multilingual (i18n)
-- Supported languages: English (default) and Portuguese (pt-BR). Contact: contact@scitekno.com.br.
-- This site uses **jekyll-polyglot** for i18n. It is configured in `_config.yml` with
-  `languages: [en, pt-BR]`, `default_lang: en`,
-  `exclude_from_localization: [assets, images, css, CNAME]`.
-- Deploy via `.github/workflows/deploy.yml` running `bundle exec jekyll build` and publishing
-  `_site/` (e.g. `peaceiris/actions-gh-pages@v3`). Native Pages push-to-deploy will NOT run Polyglot.
-- Use Polyglot's `{% I18n_Headers %}` and language switcher; do not manually rewrite localized URLs.
-- Polyglot is theme-agnostic: the Jekyll theme/template may be chosen later. When a theme is
-  selected, build the language switcher in `_includes`/layout (or use the theme's if it has one).
-  Never combine Polyglot with a second i18n system.
-- FORBIDDEN: enabling any multilingual plugin while still relying on the native GitHub Pages build.
-- Always provide a visible language switcher and respect `lang`/`hreflang` for SEO.
+- All user-facing copy lives in `_data/locales/*.yml` — one file per language (`en.yml`,
+  `pt-BR.yml`), keyed by stable string IDs. This is the single "strings file" to edit for
+  translations.
+- Templates read copy via
+  `{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}`
+  then `{{ t.key }}`. Never hardcode user-facing text in templates/pages.
+- Per-language routing via front matter:
+  - `index.md` → `lang: en`, `permalink: /`
+  - `index.pt-BR.md` → `lang: pt-BR`, `permalink: /pt-BR/`
+- `title`/`description` stay in each page's front matter (they vary per page); do NOT put
+  them in `_data/locales/*.yml`.
+- Keep a visible language switcher (`_includes/lang-switcher.html`, included by the footer)
+  and set `<html lang="{{ page.lang | default: site.lang | default: 'en' }}">`.
+- The switcher uses plain Liquid (`site.languages`, `site.default_lang`, `page.lang`) —
+  never Polyglot tags such as `static_href` or `{% I18n_Headers %}`.
 
 ## Content & i18n copy
+
 - User-facing copy defaults to English with PT-BR translation; Brazilian legal entity in footer.
 - Keep `contact@scitekno.com.br` consistent everywhere.
+- Keep the two locale files in sync. Before committing, run `ruby scripts/check-locales`
+  to verify key parity between languages.
 
 ## Assets & links
+
 - Use relative URLs / `{{ site.baseurl }}` so links work under any baseurl or language subpath.
-- Keep Google Fonts `<link>` in the layout `<head>` if moving off inline `index.html`.
+- Keep Google Fonts `<link>` in the layout `<head>`.
 - Respect `prefers-reduced-motion` for animations (already present in coming-soon CSS).
 
 ## Quality / checks
+
 - Validate YAML (`_config.yml`, `_data/*.yml`) and front matter before committing.
 - `bundle exec jekyll build` must be clean (no errors/warnings) before pushing.
 - `markdownlint` on `.md` files (extension installed in devcontainer).
-- Verify the Actions workflow builds and deploys `_site/` successfully.
+- Run `ruby scripts/check-locales` to confirm locale key parity.
 
 ## Secrets & git
+
 - Never commit secrets/API keys; SSH keys come from the mounted volume.
-- Do not commit generated `_site/` (add to `.gitignore` if missing).
+- Do not commit generated `_site/` (already in `.gitignore`).

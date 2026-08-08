@@ -7,10 +7,7 @@ languages:
   - en
   - pt-BR
 default_lang: en
-exclude_from_localization:
-  - assets
-  - images
-  - css
-  - CNAME
-plugins:
-  - jekyll-polyglot
+exclude:
+  - scripts
+  - about.md
+

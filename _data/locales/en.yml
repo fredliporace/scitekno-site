@@ -1,0 +1,9 @@
+# English (default) copy — SCITEKNO coming-soon page.
+# Read from _includes via: {% assign t = site.data.locales[page.lang] %}
+eyebrow_sub: "EARTH OBSERVATION &amp; CLOUD INFRASTRUCTURE"
+tagline: "From orbit to insight, in scale"
+lead: "<strong>SCITEKNO</strong> builds satellite image processing pipelines and cloud infrastructure for Earth observation ground segments, with strong focus on image quality assessment — from raw downlink to analysis-ready data."
+status_badge: "Site in development"
+status_reach_us: "Reach us at"
+footer_entity: "SCITEKNO SERVIÇOS EM INFORMÁTICA"
+footer_location: "RIO DE JANEIRO, BR · 22.9068°S 43.1729°W"

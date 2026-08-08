@@ -1,27 +1,8 @@
+{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}
 <footer>
   <div class="row">
-    <span>SCITEKNO SERVIÇOS EM INFORMÁTICA</span>
-    <span>RIO DE JANEIRO, BR · 22.9068°S 43.1729°W</span>
+    <span>{{ t.footer_entity }}</span>
+    <span>{{ t.footer_location }}</span>
   </div>
-  <div class="lang-switcher">
-    {% for lang in site.languages %}
-      {% if lang == site.active_lang %}
-        <span class="lang-active">{{ lang }}</span>
-      {% else %}
-        <a
-          {% static_href %}
-            {% if lang == site.default_lang %}
-              href="{{ page.permalink }}"
-            {% else %}
-              href="/{{ lang }}{{ page.permalink }}"
-            {% endif %}
-          {% endstatic_href %}
-          hreflang="{{ lang }}"
-        >{{ lang }}</a>
-      {% endif %}
-      {% if forloop.last == false %}
-        <span class="lang-sep">·</span>
-      {% endif %}
-    {% endfor %}
-  </div>
+  {% include lang-switcher.html %}
 </footer>

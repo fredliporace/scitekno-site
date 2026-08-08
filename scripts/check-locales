@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+# Validate that every _data/locales/*.yml file shares the same set of string keys.
+# Keeps the en / pt-BR catalogs in sync before committing/pushing.
+# Usage: ruby scripts/check-locales
+require 'yaml'
+
+dir = File.expand_path('../_data/locales', __dir__)
+files = Dir[File.join(dir, '*.yml')].sort
+abort "No locale files found in #{dir}" if files.empty?
+
+catalogs = files.map { |f| [File.basename(f, '.yml'), YAML.load_file(f) || {}] }
+all_keys = catalogs.flat_map { |_, data| data.keys }.uniq.sort
+
+errors = []
+catalogs.each do |lang, data|
+  missing = all_keys - data.keys
+  errors << "#{lang}: missing keys #{missing.join(', ')}" if missing.any?
+end
+
+if errors.any?
+  abort "Locale files are out of sync:\n  " + errors.join("\n  ")
+else
+  puts "Locale files in sync (#{catalogs.map(&:first).join(', ')}): #{all_keys.size} keys"
+end

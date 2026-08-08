@@ -70,6 +70,11 @@
 - `bundle exec jekyll build` must be clean (no errors/warnings) before pushing.
 - `markdownlint` on `.md` files (extension installed in devcontainer).
 - Run `ruby scripts/check-locales` to confirm locale key parity.
+- **Before finishing ANY task**, keep markdown warning-free (the VS Code Problems tab must
+  show no markdownlint issues in edited files). Run `ruby scripts/lint-markdown` to check, or
+  `ruby scripts/lint-markdown --fix` to auto-fix trailing whitespace / blank-line issues, then
+  re-run to confirm it exits 0. This mirrors `.markdownlint.json` (MD009/MD012/MD013/MD022/MD032)
+  so the CLI check and the editor agree. Excludes `_site`, `.git`, and `.kilo/`.
 
 ## Secrets & git
 

@@ -1,0 +1,102 @@
+#!/usr/bin/env ruby
+# Lightweight markdownlint check + auto-fix for this repo.
+#
+# Mirrors the rules enabled in .markdownlint.json so the CLI and the VS Code
+# markdownlint extension agree:
+#   MD009  no trailing whitespace
+#   MD012  no multiple consecutive blank lines
+#   MD013  line length <= 150
+#   MD022/MD032  blank line after headings
+# (MD033 inline-HTML and MD041 first-line-heading are disabled in the config.)
+#
+# Usage:
+#   ruby scripts/lint-markdown          # check only (no writes)
+#   ruby scripts/lint-markdown --fix    # auto-fix trailing space / blank-line issues
+#
+# Exit code is 0 when the repo is clean, 1 when violations remain.
+# Run it (or the --fix variant) before finishing a task so markdown stays
+# warning-free in the editor's Problems tab.
+
+FIX = ARGV.include?('--fix')
+ROOT = File.expand_path('..', __dir__)
+MAX_LINE = 150 # keep in sync with .markdownlint.json (MD013)
+
+# Paths we never lint: build output, git internals, third-party/tooling dirs.
+SKIP = %w[_site .git .kilo vendor node_modules]
+
+files = Dir.glob(File.join(ROOT, '**/*.md'), File::FNM_DOTMATCH).select do |f|
+  rel = f.sub("#{ROOT}/", '')
+  !SKIP.any? { |s| rel == s || rel.start_with?("#{s}/") }
+end.sort
+
+violations = []
+changed = false
+
+files.each do |f|
+  original = File.read(f)
+  next if original.empty? # leave empty (scaffold) files alone
+
+  lines = original.split("\n", -1)
+  problems = [] # relative-line reports
+
+  # MD009 + MD013 (operate on the raw lines)
+  fixed_lines = lines.map.with_index do |raw, i|
+    line = raw.chomp
+    no = i + 1
+    if line =~ /[ \t]+$/
+      problems << "#{no}: MD009 trailing whitespace"
+      line = line.sub(/[ \t]+$/, '')
+    end
+    if line.length > MAX_LINE
+      problems << "#{no}: MD013 line length #{line.length} > #{MAX_LINE}"
+    end
+    line
+  end
+
+  # MD012: collapse runs of blank lines into one
+  collapsed = []
+  blank = false
+  fixed_lines.each do |l|
+    if l.strip.empty?
+      next if blank
+      blank = true
+    else
+      blank = false
+    end
+    collapsed << l
+  end
+
+  # MD022/MD032: ensure a heading is followed by a blank line
+  final = []
+  collapsed.each_with_index do |l, i|
+    final << l
+    next_line = collapsed[i + 1]
+    if l =~ /^\#{1,6} / && next_line && !next_line.strip.empty? && next_line !~ /^\#{1,6} /
+      final << ''
+    end
+  end
+
+  new_content = (final.join("\n") + (final.any? && final[-1] != '' ? "\n" : ''))
+  # keep file ending with exactly one newline
+  new_content = final.join("\n")
+  new_content = new_content + "\n" unless new_content.end_with?("\n")
+
+  if problems.any?
+    rel = f.sub("#{ROOT}/", '')
+    problems.each { |p| violations << "#{rel}:#{p}" }
+  end
+
+  if new_content != original
+    changed = true
+    File.write(f, new_content) if FIX
+  end
+end
+
+if violations.any?
+  puts 'Markdown issues found:'
+  violations.each { |v| puts "  #{v}" }
+else
+  puts "Markdown OK (#{files.size} file(s))."
+end
+puts "(auto-fixed what was fixable; re-run to confirm nothing remains)" if changed && FIX
+exit(violations.any? ? 1 : 0)

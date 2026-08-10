@@ -38,6 +38,7 @@
 - All user-facing copy lives in `_data/locales/*.yml` — one file per language (`en.yml`,
   `pt-BR.yml`), keyed by stable string IDs. This is the single "strings file" to edit for
   translations.
+- Always keep "experiment-" keys at the end of the file.
 - Templates read copy via
   `{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}`
   then `{{ t.key }}`. Never hardcode user-facing text in templates/pages.
@@ -75,6 +76,7 @@
 - Experiment content is validated locally at `/experiment/` and related prefixed paths.
 - Only after explicit approval should experiment content be copied to production files
 (remove the `experiment-` prefix and update includes to production partials).
+- All stable string IDs in exeperiment files should have "experiment-" prefix.
 
 ## Assets & links
 

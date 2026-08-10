@@ -1,0 +1,22 @@
+{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}">{{ t.nav_brand }}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-controls="siteNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="siteNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link {% if page.permalink == '/' or page.permalink == '/pt-BR/' %}active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}" aria-current="{% if page.permalink == '/' or page.permalink == '/pt-BR/' %}page{% endif %}">{{ t.nav_home }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if page.permalink == '/eo-datasets/' or page.permalink == '/pt-BR/eo-datasets/' %}active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}eo-datasets/">{{ t.nav_eo_datasets }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#contact">{{ t.nav_contact }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -9,5 +9,4 @@ languages:
 default_lang: en
 exclude:
   - scripts
-  - about.md
 

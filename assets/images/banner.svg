@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" width="1200" height="480">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0F1526"/>
+      <stop offset="100%" stop-color="#0A0F1C"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="480" fill="url(#bgGrad)"/>
+
+  <g transform="translate(600, 180)" text-anchor="middle">
+    <text x="0" y="0" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="72" fill="#E8ECF4" letter-spacing="-0.01em">SCITEKNO</text>
+    <text x="0" y="44" font-family="'Space Grotesk', sans-serif" font-weight="400" font-size="22" fill="#4FA8E0" letter-spacing="0.04em">Da órbita ao insight, em escala</text>
+  </g>
+
+  <g transform="translate(0, 310)" aria-hidden="true">
+    <svg viewBox="0 0 1200 60" width="1200" height="60" overflow="visible">
+      <path d="M 60,30 C 300,-30 900,-30 1140,30" fill="none" stroke="rgba(124,138,163,0.18)" stroke-width="1"/>
+      <circle cx="660" cy="0" r="4" fill="#6FE0B8" filter="drop-shadow(0 0 4px rgba(111,224,184,0.6))"/>
+    </svg>
+  </g>
+</svg>

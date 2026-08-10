@@ -50,6 +50,13 @@
   and set `<html lang="{{ page.lang | default: site.lang | default: 'en' }}">`.
 - The switcher uses plain Liquid (`site.languages`, `site.default_lang`, `page.lang`) —
   never Polyglot tags such as `static_href` or `{% I18n_Headers %}`.
+- All permalinks in `<a href>` attributes must be language-aware. Never hardcode a path that
+  omits the `page.lang` conditional. Every internal link in templates, partials, and pages must
+  resolve to the correct language subtree (e.g. `/` for en, `/pt-BR/` for pt-BR).
+  Pattern: `href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}..."`.
+  When validating pages, switching language must keep all navbar, footer, and content links
+  inside the current language subtree. If any link points to the wrong language subtree after
+  a language switch, that is a regression.
 
 ## Content & i18n copy
 
@@ -57,6 +64,17 @@
 - Keep `contact@scitekno.com.br` consistent everywhere.
 - Keep the two locale files in sync. Before committing, run `ruby scripts/check-locales`
   to verify key parity between languages.
+
+## Experiment isolation
+
+- When experimenting with new pages, components, or navigation, prefix all new files with
+  `experiment-` (e.g. `experiment-nav.html`, `experiment-eo-datasets.md`).
+- Do not edit production files (`index.md`, `index.pt-BR.md`, `_includes/nav.html`, `_includes/footer.html`, etc.) during experiment work.
+- Experiment pages must include experiment-specific partials (e.g. `{% include experiment-nav.html %}` instead of `{% include nav.html %}`).
+- All experiment permalinks must use the `experiment-` prefix to keep URLs distinct from production paths.
+- Experiment content is validated locally at `/experiment/` and related prefixed paths.
+- Only after explicit approval should experiment content be copied to production files
+(remove the `experiment-` prefix and update includes to production partials).
 
 ## Assets & links
 

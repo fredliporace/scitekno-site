@@ -48,3 +48,15 @@ experiment_stat_4_label: "Years"
 experiment_cta_title: "Call to Action"
 experiment_cta_text: "A simple centered CTA block using Bootstrap utilities."
 experiment_cta_button: "Contact us"
+
+# Shared navbar
+nav_brand: "SCITEKNO"
+nav_home: "Home"
+nav_eo_datasets: "EO Datasets on AWS"
+nav_contact: "Contact"
+
+# EO Datasets page
+eo_eyebrow: "EARTH OBSERVATION"
+eo_title: "EO Datasets on AWS"
+eo_lead: "Explore satellite imagery and Earth observation datasets available through AWS open data programs."
+eo_cta_button: "Get in touch"

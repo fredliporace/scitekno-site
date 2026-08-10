@@ -8,7 +8,8 @@
         "davidanson.vscode-markdownlint",
         "kilocode.Kilo-Code",
         "saoudrizwan.claude-dev",
-        "ms-vscode.live-server"
+        "ms-vscode.live-server",
+        "lirobi.phone-preview"
       ]
     }
   },

@@ -83,5 +83,4 @@
 
 ## Mobile / Desktop support
 
-- The site must work on mobile and desktop, with components such as navbars being collapsible
-  on mobile.
+- The site must work on mobile and desktop, with components such as navbars being collapsible on mobile.

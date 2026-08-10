@@ -7,7 +7,8 @@
         "shopify.ruby-lsp",
         "davidanson.vscode-markdownlint",
         "kilocode.Kilo-Code",
-        "saoudrizwan.claude-dev"
+        "saoudrizwan.claude-dev",
+        "ms-vscode.live-server"
       ]
     }
   },

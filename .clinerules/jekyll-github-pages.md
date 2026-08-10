@@ -83,6 +83,11 @@
 - Use relative URLs / `{{ site.baseurl }}` so links work under any baseurl or language subpath.
 - Keep Google Fonts `<link>` in the layout `<head>`.
 - Respect `prefers-reduced-motion` for animations (already present in coming-soon CSS).
+- When adding centered content blocks (animations, widgets, hero elements), always use explicit
+  centering: `margin: X auto Y` for block elements, or Bootstrap utilities like
+  `justify-content-center` / `text-center`. Do not rely on parent container alignment alone
+  for signature/centered elements. Verify centering visually when adding new block-level elements
+  with constrained widths.
 
 ## Quality / checks
 

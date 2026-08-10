@@ -1,12 +1,10 @@
-# Português (pt-BR) — página "em breve" da SCITEKNO.
-# Lido nos _includes via: {% assign t = site.data.locales[page.lang] %}
 eyebrow_sub: "OBSERVAÇÃO DA TERRA E INFRAESTRUTURA EM NUVEM"
 tagline: "Da órbita ao insight, em escala"
 lead: "A <strong>SCITEKNO</strong> desenvolve pipelines de processamento de imagens de satélite e infraestrutura em nuvem para segmentos terrestres de observação da Terra, com forte foco em avaliação de qualidade de imagem — do downlink bruto aos dados prontos para análise."
-status_badge: "Site em desenvolvimento"
+# status_badge: "Site em desenvolvimento"
 status_reach_us: "Fale conosco"
 footer_entity: "SCITEKNO SERVIÇOS EM INFORMÁTICA"
-footer_location: "RIO DE JANEIRO, BR · 22.9068°S 43.1729°W"
+footer_location: "RIO DE JANEIRO, BRASIL"
 
 # Navbar compartilhado
 nav_brand: "SCITEKNO"
@@ -17,8 +15,15 @@ nav_contact: "Contato"
 # Página EO Datasets
 eo_eyebrow: "OBSERVAÇÃO DA TERRA"
 eo_title: "Datasets EO na AWS"
-eo_lead: "Explore imagens de satélite e datasets de observação da Terra disponíveis nos programas de dados abertos da AWS."
-eo_cta_button: "Fale conosco"
+eo_tagline: "Imagens CBERS e Amazonia-1 na AWS"
+eo_lead: "A SCITEKNO é parceira do programa Earth on AWS desde 2018, oferecendo acesso a imagens do CBERS-4, CBERS-4A e Amazonia-1 na AWS."
+eo_text_1: "Nossos pipelines serverless transferem automaticamente cenas do CBERS-4, CBERS-4A e Amazonia-1 do <a href='https://www.dgi.inpe.br/catalogo/explore'>catálogo do INPE</a> e as convertem para GeoTIFFs Otimizados para Nuvem (COGs), desbloqueando todo o potencial dessas imagens para processamento e análise em larga escala na nuvem computacional."
+eo_text_2: "Os COGs e arquivos de metadados são armazenados em um bucket S3 e disponibilizados ao público através do programa Earth on AWS."
+eo_stat_1_number: "6,54M"
+eo_stat_1_label: "Objetos"
+eo_stat_2_number: "228,66 T"
+eo_stat_2_label: "Armazenamento"
+eo_text_3: "Os recursos AWS são descritos no Registry of Open Data: <a href='https://registry.opendata.aws/cbers/'>CBERS</a> and <a href='https://registry.opendata.aws/amazonia/'>Amazonia-1</a>."
 
 # Página de experimento
 experiment_eyebrow: "ÁREA DE TESTES"
@@ -60,3 +65,10 @@ experiment_stat_4_label: "Anos"
 experiment_cta_title: "Call to Action"
 experiment_cta_text: "Um bloco de CTA centralizado simples usando utilitários Bootstrap."
 experiment_cta_button: "Fale conosco"
+
+experiment_eo_text_1: "Nossos pipelines transformam o downlink bruto em produtos prontos para análise, com qualidade radiométrica e geométrica validada para uso científico e operacional."
+experiment_eo_text_2: "Os dados passam por fluxos de trabalho com qualidade avaliada antes da entrega, garantindo consistência para aplicações de séries temporais e detecção de mudanças."
+experiment_eo_stat_1_number: "6,54M"
+experiment_eo_stat_1_label: "Objetos"
+experiment_eo_stat_2_number: "228,66 T"
+experiment_eo_stat_2_label: "Armazenamento"

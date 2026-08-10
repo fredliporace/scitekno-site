@@ -80,3 +80,8 @@
 
 - Never commit secrets/API keys; SSH keys come from the mounted volume.
 - Do not commit generated `_site/` (already in `.gitignore`).
+
+## Mobile / Desktop support
+
+- The site must work on mobile and desktop, with components such as navbars being collapsible
+  on mobile.

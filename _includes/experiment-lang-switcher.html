@@ -12,9 +12,9 @@
       <span class="lang-active">{{ lang }}</span>
     {% else %}
       {% if lang == 'en' %}
-        <a href="{{ en_href }}" hreflang="{{ lang }}">{{ lang }}</a>
+        <a href="{{ en_href }}" hreflang="{{ lang }}" data-lang="{{ lang }}">{{ lang }}</a>
       {% else %}
-        <a href="{{ pt_href }}" hreflang="{{ lang }}">{{ lang }}</a>
+        <a href="{{ pt_href }}" hreflang="{{ lang }}" data-lang="{{ lang }}">{{ lang }}</a>
       {% endif %}
     {% endif %}
     {% if forloop.last == false %}
@@ -22,3 +22,19 @@
     {% endif %}
   {% endfor %}
 </div>
+<script>
+// Record a manual language choice so the auto-redirect (lang-redirect.html)
+// does not override it during this tab session.
+(function () {
+  var links = document.querySelectorAll('.lang-switcher a[data-lang]');
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', function () {
+      try {
+        sessionStorage.setItem('scitekno-lang', this.getAttribute('data-lang'));
+      } catch (e) {
+        // sessionStorage unavailable: fall back to auto-detection.
+      }
+    });
+  }
+})();
+</script>

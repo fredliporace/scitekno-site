@@ -1,0 +1,97 @@
+<script>
+// Detect the browser's preferred language and route to it when supported.
+// Supported languages come from _config.yml (`site.languages`); current page
+// language comes from the page front matter (`page.lang`). Falls back to the
+// configured default language.
+(function () {
+  var SUPPORTED = {{ site.languages | jsonify }};
+  var CURRENT_LANG = {{ page.lang | default: site.default_lang | jsonify }};
+  var DEFAULT_LANG = {{ site.default_lang | jsonify }};
+
+  function normalize(lang) {
+    return (lang || '').toLowerCase();
+  }
+
+  function languageOf(code) {
+    var parts = normalize(code).split('-');
+    return parts[0];
+  }
+
+  function matchSupported(lang) {
+    var normalized = normalize(lang);
+    // Exact code match (e.g. "pt-BR").
+    for (var i = 0; i < SUPPORTED.length; i++) {
+      if (normalize(SUPPORTED[i]) === normalized) {
+        return SUPPORTED[i];
+      }
+    }
+    // Base-language match: "pt" or "pt-PT" maps to the only Portuguese
+    // supported variant ("pt-BR"), since there is no pt-PT route.
+    var base = languageOf(lang);
+    for (i = 0; i < SUPPORTED.length; i++) {
+      if (languageOf(SUPPORTED[i]) === base) {
+        return SUPPORTED[i];
+      }
+    }
+    return null;
+  }
+
+  function preferredLanguage() {
+    var candidates = [];
+    if (navigator.languages) {
+      candidates = candidates.concat(navigator.languages);
+    }
+    if (navigator.language) {
+      candidates.push(navigator.language);
+    }
+    for (var i = 0; i < candidates.length; i++) {
+      var matched = matchSupported(candidates[i]);
+      if (matched) {
+        return matched;
+      }
+    }
+    return DEFAULT_LANG;
+  }
+
+  function targetPath(lang) {
+    // Current pathname, with any existing /pt-BR prefix removed so we start
+    // from the root route for that page.
+    var stripped = window.location.pathname.replace(/^\/pt-br(\/|$)/i, '$1') || '/';
+    if (!stripped) {
+      stripped = '/';
+    }
+    if (lang === DEFAULT_LANG) {
+      return stripped;
+    }
+    // Target is a non-default supported language: re-prefix with its route
+    // (exact code casing, e.g. "pt-BR").
+    var route = '/' + lang + '/';
+    return route.slice(0, -1) + (stripped === '/' ? '/' : stripped);
+  }
+
+  if (SUPPORTED.indexOf(CURRENT_LANG) === -1) {
+    CURRENT_LANG = DEFAULT_LANG;
+  }
+
+  // The language switcher stores an explicit manual choice in sessionStorage
+  // (per tab, cleared when the tab/session closes). A manual choice takes
+  // priority over automatic browser-language detection.
+  var chosen = null;
+  try {
+    chosen = sessionStorage.getItem('scitekno-lang');
+  } catch (e) {
+    chosen = null;
+  }
+
+  var target;
+  if (chosen && SUPPORTED.indexOf(chosen) !== -1) {
+    target = chosen;
+  } else {
+    target = preferredLanguage();
+  }
+
+  if (target !== CURRENT_LANG) {
+    window.location.replace(targetPath(target) + window.location.search + window.location.hash);
+  }
+})();
+</script>

@@ -5,4 +5,4 @@ permalink: /
 title: SCITEKNO — Earth observation & cloud infrastructure
 description: SCITEKNO — satellite image processing pipelines and cloud infrastructure for Earth observation ground segments.
 ---
-{% include home-content.html %}
+{% include index-content.html %}

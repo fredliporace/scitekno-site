@@ -76,7 +76,7 @@
 - Experiment content is validated locally at `/experiment/` and related prefixed paths.
 - Only after explicit approval should experiment content be copied to production files
 (remove the `experiment-` prefix and update includes to production partials).
-- All stable string IDs in exeperiment files should have "experiment-" prefix.
+- All stable string IDs in experiment files should have "experiment-" prefix.
 
 ## Assets & links
 

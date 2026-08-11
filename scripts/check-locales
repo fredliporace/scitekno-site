@@ -11,6 +11,9 @@
 #   4. Every defined key is referenced by at least one reachable template (unused/
 #      dead strings are reported as warnings, non-fatal).
 #
+#   Dynamic, data-driven references (galleries that loop over `_data/*.yml` and build
+#   keys with `| append`) are expanded from the data files and counted as used.
+#
 # Only *reachable* templates are scanned: we start from the root *.md pages and
 # _layouts/*.html and follow {% include %} references. Orphan/dead partials are not
 # scanned, and HTML comments are stripped so commented-out tokens aren't counted.
@@ -34,6 +37,64 @@ def flat_keys(path)
   end
 end
 
+# Expand data-driven, dynamic locale-key references like:
+#   {% for item in site.data.timelapses %}
+#     {% assign ck = 'experiment_timelapses_'  | append: item.copy_id %}
+#     {% assign title_key = ck | append: '_title' %}
+#     {{ t[title_key] }}
+# into their concrete keys (e.g. `experiment_timelapses_item_1_title`) by reading the
+# entry `copy_id` values from _data/timelapses.yml. This stops such keys being reported
+# as "unused" while still letting the "referenced but not defined" error catch a catalog
+# that removes one of them. Fail-safe: idioms we can't parse are simply ignored.
+def dynamic_used_keys(content)
+  used = {}
+  # (loop variable) => data file basename, e.g. item => timelapses
+  loops = {}
+  content.scan(/\{%\s*for\s+(\w+)\s+in\s+site\.data\.([\w.]+)\s*%\}/).each do |lv, file|
+    loops[lv] = file
+  end
+  return [] if loops.empty?
+
+  # basevar => [key_prefix_literal, loop_variable, field]
+  bases = {}
+  content.scan(/\{%\s*assign\s+(\w+)\s*=\s*'([^']+)'\s*\|\s*append:\s*(\w+)\.(\w+)\s*%\}/).each do |var, prefix, lv, field|
+    bases[var] = [prefix, lv, field] if loops.key?(lv)
+  end
+  return [] if bases.empty?
+
+  # derived kvar => [basevar, suffix]
+  derived = {}
+  content.scan(/\{%\s*assign\s+(\w+)\s*=\s*(\w+)\s*\|\s*append:\s*'(\w+)'\s*%\}/).each do |kvar, basevar, suffix|
+    derived[kvar] = [basevar, suffix] if bases.key?(basevar)
+  end
+
+  # basevar => suffixes actually referenced from t[...]
+  refs = {}
+  content.scan(/t\[\s*(\w+)\s*\]/).each do |(var)|
+    if derived.key?(var)
+      basevar, suffix = derived[var]
+      (refs[basevar] ||= []) << suffix
+    end
+  end
+  content.scan(/t\[\s*(\w+)\s*\|\s*append:\s*'(\w+)'\s*\]/).each do |var, suffix|
+    (refs[var] ||= []) << suffix if bases.key?(var)
+  end
+
+  refs.each do |basevar, suffixes|
+    prefix, lv, field = bases[basevar]
+    data_file = File.join(ROOT, '_data', "#{loops[lv]}.yml")
+    next unless File.file?(data_file)
+    entries = YAML.load_file(data_file) || []
+    entries.each do |entry|
+      next unless entry.is_a?(Hash)
+      val = entry[field]
+      next unless val
+      suffixes.uniq.each { |sfx| used["#{prefix}#{val}_#{sfx.sub(/\A_/, "")}"] = true }
+    end
+  end
+  used.keys
+end
+
 # Collect t.<key> tokens used across all reachable templates (pages -> layout -> includes).
 def used_keys
   seen_files = {}
@@ -45,6 +106,7 @@ def used_keys
     seen_files[path] = true
     content = File.read(path).gsub(%r{<!--.*?-->}m, '')
     content.scan(TOKEN_RE).flatten.each { |k| used[k] = true }
+    dynamic_used_keys(content).each { |k| used[k] = true }
     content.scan(INCLUDE_RE).flatten.each do |name|
       target = File.join(INCLUDE_DIR, name)
       queue << target if File.file?(target)

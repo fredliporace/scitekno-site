@@ -1,0 +1,75 @@
+{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}
+
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/experiment-modern.css">
+
+<div class="em-root">
+
+  {% include experiment-modern-nav.html %}
+
+  <main class="em-main">
+
+    <!-- HEADER -->
+    <section class="em-hero">
+      <div class="container">
+        <p class="em-eyebrow">{{ t.experiment_timelapses_eyebrow }}</p>
+        <h1 class="em-hero__title">{{ t.experiment_timelapses_title }}</h1>
+        <p class="em-hero__lead">{{ t.experiment_timelapses_lead }}</p>
+        <div class="em-hero__cta">
+          <a href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/" class="em-btn em-btn--ghost">{{ t.nav_home }}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY (loops over _data/timelapses.yml) -->
+    <section class="em-section em-section--alt">
+      <div class="container">
+        <div class="row g-4">
+          {% for item in site.data.timelapses %}
+            {% assign ck = 'experiment_timelapses_' | append: item.copy_id %}
+            {% assign title_key = ck | append: '_title' %}
+            {% assign desc_key = ck | append: '_desc' %}
+            <div class="col-md-6 col-lg-4">
+              <article class="em-tile">
+                <div class="em-tile__media">
+                  <svg class="em-tile__svg" viewBox="0 0 400 225" role="img" aria-label="{{ t[title_key] }}">
+                    <defs>
+                      <linearGradient id="emtg{{ forloop.index }}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="{{ item.c1 }}"/>
+                        <stop offset="1" stop-color="{{ item.c2 }}"/>
+                      </linearGradient>
+                    </defs>
+                    <rect width="400" height="225" fill="url(#emtg{{ forloop.index }})"/>
+                    <circle cx="300" cy="150" r="88" fill="none" stroke="rgba(234,240,251,0.30)" stroke-width="1"/>
+                    <circle cx="300" cy="150" r="64" fill="none" stroke="rgba(234,240,251,0.20)" stroke-width="1"/>
+                    <circle cx="287" cy="136" r="17" fill="rgba(234,240,251,0.92)"/>
+                    <path d="M 0,225 L 60,196 L 120,208 L 200,182 L 280,192 L 340,172 L 400,186 L 400,225 Z" fill="rgba(6,10,19,0.35)"/>
+                    <path d="M 60,225 L 120,208 L 120,225 Z" fill="rgba(234,240,251,0.12)"/>
+                  </svg>
+                  <span class="em-tile__badge">{{ item.sensor }}</span>
+                  <span class="em-tile__tag">{{ t.experiment_timelapses_tag_duration }} · {{ item.duration }}</span>
+                  <span class="em-tile__play" aria-hidden="true"></span>
+                </div>
+                <div class="em-tile__body">
+                  <h3 class="em-tile__title">{{ t[title_key] }}</h3>
+                  <p class="em-tile__desc">{{ t[desc_key] }}</p>
+                </div>
+              </article>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="em-cta">
+      <p class="em-eyebrow em-cta__eyebrow">{{ t.experiment_modern_cta_eyebrow }}</p>
+      <h2 class="em-cta__title">{{ t.experiment_modern_cta_title }}</h2>
+      <p class="em-cta__text">{{ t.experiment_modern_cta_text }}</p>
+      <a href="mailto:contact@scitekno.com.br" class="em-btn em-btn--solid">{{ t.experiment_modern_hero_cta }}</a>
+    </section>
+
+  </main>
+
+  {% include experiment-modern-footer.html %}
+
+</div>

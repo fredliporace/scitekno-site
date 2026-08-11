@@ -1,0 +1,28 @@
+{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}
+<footer class="em-footer">
+  <div class="container">
+    <div class="em-footer__grid">
+      <div>
+        <div class="em-footer__brand"><span class="em-brand__mark">✹</span>{{ t.nav_brand }}</div>
+        <p class="em-footer__tagline">{{ t.experiment_modern_footer_tagline }}</p>
+      </div>
+      <div>
+        <div class="em-footer__heading">{{ t.experiment_modern_footer_explore }}</div>
+        <ul class="em-footer__links">
+          <li><a href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/">{{ t.nav_home }}</a></li>
+          <li><a href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-timelapses/">{{ t.experiment_modern_nav_timelapses }}</a></li>
+          <li><a href="#contact">{{ t.experiment_modern_nav_contact }}</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="em-footer__heading">{{ t.experiment_modern_nav_contact }}</div>
+        <p class="em-footer__item"><a href="mailto:contact@scitekno.com.br">contact@scitekno.com.br</a></p>
+        {% include experiment-modern-lang-switcher.html %}
+      </div>
+    </div>
+    <div class="em-footer__bottom">
+      <span>{{ t.footer_entity }}</span>
+      <span>{{ t.footer_location }}</span>
+    </div>
+  </div>
+</footer>

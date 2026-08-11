@@ -1,4 +1,4 @@
-{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}
+{% assign t = site.data.locales["experiment"][page.lang] | default: site.data.locales["experiment"][site.default_lang] %}
 
 <main class="experiment-page">
   <div class="container py-5">
@@ -10,7 +10,7 @@
     <hr class="my-5">
 
     <h2 class="h4 mb-3">{{ t.experiment_nav_title }}</h2>
-    {% include experiment-nav.html %}
+    {% include experiment/nav.html %}
 
     <hr class="my-5">
 

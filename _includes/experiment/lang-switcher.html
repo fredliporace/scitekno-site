@@ -1,8 +1,8 @@
-{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}
-{% assign en_href = page.permalink | replace: '/pt-BR/', '/' %}
 {% if page.lang == 'en' %}
+  {% assign en_href = page.permalink | replace: '/pt-BR/', '/' %}
   {% assign pt_href = '/pt-BR' | append: page.permalink %}
 {% else %}
+  {% assign en_href = page.permalink | replace: '/pt-BR/', '/' %}
   {% assign pt_href = page.permalink %}
 {% endif %}
 

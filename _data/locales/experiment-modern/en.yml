@@ -1,0 +1,69 @@
+# Experiment-modern sandbox — English (fully self-contained, no keys shared with production).
+# Prefixed `experiment_modern_*` / `experiment_timelapses_*` mark these as belonging
+# to this sandbox. On promotion, copy the excerpt and strip the `experiment-` prefix.
+
+# Shared navbar (copied from production, prefixed)
+experiment_modern_nav_brand: "SCITEKNO"
+experiment_modern_nav_home: "Home"
+experiment_modern_nav_contact: "Contact"
+experiment_modern_nav_features: "Capabilities"
+experiment_modern_nav_pipeline: "Pipeline"
+experiment_modern_nav_timelapses: "Timelapses"
+
+# Shared footer (copied from production, prefixed)
+experiment_modern_footer_entity: "SCITEKNO SERVIÇOS EM INFORMÁTICA"
+experiment_modern_footer_location: "RIO DE JANEIRO, BRAZIL"
+experiment_modern_footer_tagline: "Satellite image processing pipelines and cloud infrastructure for Earth observation ground segments."
+experiment_modern_footer_explore: "Explore"
+
+# EO stats (copied from production, prefixed)
+experiment_modern_eo_stat_1_number: "6.54M"
+experiment_modern_eo_stat_1_label: "Objects"
+experiment_modern_eo_stat_2_number: "228.66 T"
+experiment_modern_eo_stat_2_label: "Storage"
+
+# Modern prototype
+experiment_modern_hero_eyebrow: "EARTH OBSERVATION × CLOUD INFRASTRUCTURE"
+experiment_modern_hero_title_part1: "From orbit to insight,"
+experiment_modern_hero_title_part2: "built to scale."
+experiment_modern_hero_lead: "SCITEKNO builds satellite image processing pipelines and cloud infrastructure for Earth observation ground segments — from raw downlink to analysis-ready data."
+experiment_modern_hero_live: "Systems operational"
+experiment_modern_hero_cta: "Talk to us"
+experiment_modern_feat_eyebrow: "WHAT WE DO"
+experiment_modern_feat_title: "Mission-critical Earth observation tooling"
+experiment_modern_feat_1_title: "Imagery pipelines"
+experiment_modern_feat_1_text: "Serverless, scalable processing that turns raw satellite downlink into analysis-ready products."
+experiment_modern_feat_2_title: "Cloud infrastructure"
+experiment_modern_feat_2_text: "Public shares, COG datasets and ground-segment infrastructure running on AWS."
+experiment_modern_feat_3_title: "Quality assessment"
+experiment_modern_feat_3_text: "Radiometric and geometric validation on every scene, engineered for science and operations."
+experiment_modern_process_eyebrow: "THE PIPELINE"
+experiment_modern_process_title: "From raw downlink to analysis-ready, in three steps"
+experiment_modern_process_1_title: "Ingest"
+experiment_modern_process_1_text: "Scenes flow automatically from INPE's catalog."
+experiment_modern_process_2_title: "Convert"
+experiment_modern_process_2_text: "Transformed to Cloud-Optimized GeoTIFFs (COGs)."
+experiment_modern_process_3_title: "Publish"
+experiment_modern_process_3_text: "Stored on S3 and shared through the Earth on AWS program."
+experiment_modern_stats_eyebrow: "IN PRODUCTION"
+experiment_modern_stats_title: "The data we make accessible"
+experiment_modern_cta_eyebrow: "GET IN TOUCH"
+experiment_modern_cta_title: "Let's build your ground segment"
+experiment_modern_cta_text: "Talk to us about pipelines, data quality and cloud infrastructure for your imagery."
+experiment_modern_more_title: "Go deeper"
+experiment_modern_more_text: "Dedicated topic pages keep the landing lean. See how satellite timelapses get their own space."
+experiment_modern_more_cta: "View satellite timelapses"
+
+# Timelapses topic page
+experiment_timelapses_eyebrow: "TIMELAPSES"
+experiment_timelapses_title: "Earth from orbit, in motion"
+experiment_timelapses_lead: "A growing collection of satellite timelapses we've produced from public CBERS and Amazonia-1 imagery - examples of what data-driven ground segments can make routine."
+experiment_timelapses_tag_duration: "Duration"
+experiment_timelapses_item_1_title: "Clouds marching over Rio de Janeiro"
+experiment_timelapses_item_1_desc: "A daytime sweep of the Atlantic moisture band pushing across the city and its ring of mountains."
+experiment_timelapses_item_2_title: "Dusk light over the tropical Atlantic"
+experiment_timelapses_item_2_desc: "Evening passes catching long shadows and deep ocean hues off the Brazilian coast."
+experiment_timelapses_item_3_title: "Amazon basin, breathing by season"
+experiment_timelapses_item_3_desc: "Flood-season and dry-season cycles across the floodplains and meandering rivers."
+experiment_timelapses_item_4_title: "Night passes in thermal infrared"
+experiment_timelapses_item_4_desc: "Clouds and warm fronts glowing against the cold of space in nighttime swaths."

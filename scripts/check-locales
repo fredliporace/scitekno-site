@@ -1,31 +1,38 @@
 #!/usr/bin/env ruby
-# Validate the translation catalogs in _data/locales/*.yml.
+# Validate the translation catalogs under _data/locales/**/*.yml.
+#
+# Catalogs are grouped by directory, where each directory holds the language
+# variants for one "realm" (production or an experiment sandbox):
+#   _data/locales/{en,pt-BR}.yml                         production
+#   _data/locales/experiment/{en,pt-BR}.yml              experiment sandbox
+#   _data/locales/experiment-modern/{en,pt-BR}.yml       experiment-modern sandbox
 #
 # Checks (exit 1 when any fails):
-#   1. All catalogs expose the same top-level keys (parity).
-#   2. No catalog defines a top-level key twice (duplicates). YAML silently keeps
-#      only the last value, so a duplicated key hides real content and can silently
-#      change a rendered string.
-#   3. Every `t.<key>` used by a "reachable" template (a page/layout or any template
-#      it {% include %}s) is defined in every catalog — a missing key renders empty.
-#   4. Every defined key is referenced by at least one reachable template (unused/
-#      dead strings are reported as warnings, non-fatal).
+#   1. Within each directory group, all language catalogs expose the same
+#      top-level keys (parity).
+#   2. No catalog defines a top-level key twice (duplicates).
+#   3. Every `t.<key>` used by a "reachable" template for a realm is defined in
+#      that realm's catalog. Every realm scans its own pages + layout and the
+#      {% include %}/partials they pull in, so keys are scoped correctly.
+#   4. Every defined key is referenced by at least one reachable template of its
+#      realm (unused/dead strings are reported as warnings, non-fatal).
 #
-#   Dynamic, data-driven references (galleries that loop over `_data/*.yml` and build
-#   keys with `| append`) are expanded from the data files and counted as used.
+# A realm is derived from the catalog directory + source layout/page location:
+#   production        -> root *.md pages + _layouts/default.html
+#   experiment        -> experiments/experiment/*.md + _layouts/experiment.html
+#   experiment-modern -> experiments/experiment-modern/*.md + _layouts/experiment-modern.html
+#   (any extra experiments/<name>/ dir is handled generically)
 #
-# Only *reachable* templates are scanned: we start from the root *.md pages and
-# _layouts/*.html and follow {% include %} references. Orphan/dead partials are not
-# scanned, and HTML comments are stripped so commented-out tokens aren't counted.
+# Dynamic, data-driven references (galleries that loop over _data/*.yml and build
+# keys with `| append`) are expanded from the data files and counted as used.
+# HTML comments are stripped so commented-out tokens aren't counted.
 #
 # Usage: ruby scripts/check-locales
 require 'yaml'
 
 ROOT = File.expand_path('..', __dir__)
-LOCALE_DIR = File.join(ROOT, '_data', 'locales')
+LOCALE_ROOT = File.join(ROOT, '_data', 'locales')
 INCLUDE_DIR = File.join(ROOT, '_includes')
-PAGE_PATTERN = File.join(ROOT, '*.md')
-LAYOUT_PATTERN = File.join(ROOT, '_layouts', '**', '*.html')
 INCLUDE_RE = /{%\s*include\s+([^\s%}]+)\s*%}/
 TOKEN_RE = /\bt\.([A-Za-z_][A-Za-z0-9_]*)/
 
@@ -42,33 +49,24 @@ end
 #     {% assign ck = 'experiment_timelapses_'  | append: item.copy_id %}
 #     {% assign title_key = ck | append: '_title' %}
 #     {{ t[title_key] }}
-# into their concrete keys (e.g. `experiment_timelapses_item_1_title`) by reading the
-# entry `copy_id` values from _data/timelapses.yml. This stops such keys being reported
-# as "unused" while still letting the "referenced but not defined" error catch a catalog
-# that removes one of them. Fail-safe: idioms we can't parse are simply ignored.
+# into concrete keys (e.g. `experiment_timelapses_item_1_title`). Fail-safe:
+# idioms we can't parse are simply ignored.
 def dynamic_used_keys(content)
   used = {}
-  # (loop variable) => data file basename, e.g. item => timelapses
   loops = {}
   content.scan(/\{%\s*for\s+(\w+)\s+in\s+site\.data\.([\w.]+)\s*%\}/).each do |lv, file|
     loops[lv] = file
   end
   return [] if loops.empty?
-
-  # basevar => [key_prefix_literal, loop_variable, field]
   bases = {}
   content.scan(/\{%\s*assign\s+(\w+)\s*=\s*'([^']+)'\s*\|\s*append:\s*(\w+)\.(\w+)\s*%\}/).each do |var, prefix, lv, field|
     bases[var] = [prefix, lv, field] if loops.key?(lv)
   end
   return [] if bases.empty?
-
-  # derived kvar => [basevar, suffix]
   derived = {}
   content.scan(/\{%\s*assign\s+(\w+)\s*=\s*(\w+)\s*\|\s*append:\s*'(\w+)'\s*%\}/).each do |kvar, basevar, suffix|
     derived[kvar] = [basevar, suffix] if bases.key?(basevar)
   end
-
-  # basevar => suffixes actually referenced from t[...]
   refs = {}
   content.scan(/t\[\s*(\w+)\s*\]/).each do |(var)|
     if derived.key?(var)
@@ -79,7 +77,6 @@ def dynamic_used_keys(content)
   content.scan(/t\[\s*(\w+)\s*\|\s*append:\s*'(\w+)'\s*\]/).each do |var, suffix|
     (refs[var] ||= []) << suffix if bases.key?(var)
   end
-
   refs.each do |basevar, suffixes|
     prefix, lv, field = bases[basevar]
     data_file = File.join(ROOT, '_data', "#{loops[lv]}.yml")
@@ -95,55 +92,92 @@ def dynamic_used_keys(content)
   used.keys
 end
 
-# Collect t.<key> tokens used across all reachable templates (pages -> layout -> includes).
-def used_keys
+# Collect t.<key> tokens used across a set of root templates, following includes.
+def collect_used(roots)
   seen_files = {}
   used = {}
-  queue = Dir[PAGE_PATTERN] + Dir[LAYOUT_PATTERN]
+  queue = roots.dup
   until queue.empty?
     path = queue.pop
     next if seen_files[path]
+    next unless File.file?(path)
     seen_files[path] = true
     content = File.read(path).gsub(%r{<!--.*?-->}m, '')
     content.scan(TOKEN_RE).flatten.each { |k| used[k] = true }
     dynamic_used_keys(content).each { |k| used[k] = true }
     content.scan(INCLUDE_RE).flatten.each do |name|
-      target = File.join(INCLUDE_DIR, name)
-      queue << target if File.file?(target)
+      queue << File.join(INCLUDE_DIR, name)
     end
   end
   used.keys
 end
 
-catalog_files = Dir[File.join(LOCALE_DIR, '*.yml')].sort
-abort "No locale files found in #{LOCALE_DIR}" if catalog_files.empty?
+def display_dir(dir)
+  return '.' if dir == LOCALE_ROOT
+  dir.sub("#{LOCALE_ROOT}/", '')
+end
 
-flat_by_lang = catalog_files.to_h { |f| [File.basename(f, '.yml'), flat_keys(f)] }
-all_keys = flat_by_lang.values.flatten.uniq.sort
+catalog_files = Dir[File.join(LOCALE_ROOT, '**', '*.yml')].sort
+abort "No locale files found in #{LOCALE_ROOT}" if catalog_files.empty?
+
+# Group catalogs by directory (a directory == one realm's language set).
+group_data = catalog_files.group_by { |f| File.dirname(f) }.to_h do |dir, files|
+  [dir, files.to_h { |f| [File.basename(f, '.yml'), flat_keys(f)] }]
+end
 
 errors = []
 warnings = []
 
-catalog_files.each do |f|
-  lang = File.basename(f, '.yml')
-  keys = flat_by_lang[lang]
-  dups = keys.group_by(&:itself).select { |_, g| g.size > 1 }.keys.sort
-  errors << "#{lang}: duplicate keys: #{dups.join(', ')}" if dups.any?
-  missing = all_keys - keys
-  errors << "#{lang}: missing keys: #{missing.join(', ')}" if missing.any?
+# Parity + duplicate-key checks within each directory group.
+group_data.each do |dir, langs|
+  langs.each do |lang, keys|
+    dups = keys.group_by(&:itself).select { |_, g| g.size > 1 }.keys.sort
+    errors << "#{display_dir(dir)}/#{lang}: duplicate keys: #{dups.join(', ')}" if dups.any?
+  end
+  all = langs.values.flatten.uniq
+  langs.each do |lang, keys|
+    missing = all - keys
+    errors << "#{display_dir(dir)}/#{lang}: missing keys: #{missing.join(', ')}" if missing.any?
+  end
 end
 
-used = used_keys.sort
-missing_used = used - all_keys
-errors << "referenced but not defined: #{missing_used.join(', ')}" if missing_used.any?
+# Build per-realm roots from source pages + layouts.
+realms = []
+realms << {
+  name: 'production',
+  catalog_dir: LOCALE_ROOT,
+  roots: Dir[File.join(ROOT, '*.md')] + [File.join(ROOT, '_layouts', 'default.html')],
+}
+Dir[File.join(ROOT, 'experiments', '*')].sort.each do |d|
+  next unless File.directory?(d)
+  name = File.basename(d)
+  realms << {
+    name: name,
+    catalog_dir: File.join(LOCALE_ROOT, name),
+    roots: Dir[File.join(d, '*.md')] + [File.join(ROOT, '_layouts', "#{name}.html")],
+  }
+end
 
-unused = all_keys - used
-warnings << "defined but never referenced: #{unused.join(', ')}" if unused.any?
+realms.each do |realm|
+  group = group_data[realm[:catalog_dir]]
+  next unless group # a sandbox source dir with no catalog yet; skip quietly
+  used = collect_used(realm[:roots])
+  all_keys = group.values.flatten.uniq
+  missing_used = used - all_keys
+  errors << "#{realm[:name]}: referenced but not defined: #{missing_used.sort.join(', ')}" if missing_used.any?
+  group.each do |lang, keys|
+    unused = keys - used
+    warnings << "#{realm[:name]}/#{lang}: defined but never referenced: #{unused.sort.join(', ')}" if unused.any?
+  end
+end
 
 if errors.any?
   abort "Locale check FAILED:\n  " + errors.join("\n  ")
 else
-  puts "Locale files in sync (#{catalog_files.map { |f| File.basename(f, '.yml') }.join(', ')}): #{all_keys.size} keys"
+  puts 'Locale files in sync:'
+  group_data.each do |dir, langs|
+    puts "  #{display_dir(dir)}: #{langs.keys.join(', ')} (#{langs.values.flatten.uniq.size} keys)"
+  end
   warnings.each { |w| puts "  warning: #{w}" }
   puts 'OK'
 end

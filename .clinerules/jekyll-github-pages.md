@@ -63,20 +63,35 @@
 
 - User-facing copy defaults to English with PT-BR translation; Brazilian legal entity in footer.
 - Keep `contact@scitekno.com.br` consistent everywhere.
-- Keep the two locale files in sync. Before committing, run `ruby scripts/check-locales`
-  to verify key parity between languages.
+- Translation catalogs live under `_data/locales/` and are grouped by realm, one directory per
+  sandbox, with per-language files:
+    `_data/locales/{en,pt-BR}.yml`            production (top level)
+    `_data/locales/<sandbox>/{en,pt-BR}.yml`  each experiment sandbox
+  Keep the two language files within a realm in sync. Before committing, run
+  `ruby scripts/check-locales` to verify key parity between languages in every realm.
 
 ## Experiment isolation
 
-- When experimenting with new pages, components, or navigation, prefix all new files with
-  `experiment-` (e.g. `experiment-nav.html`, `experiment-eo-datasets.md`).
-- Do not edit production files (`index.md`, `index.pt-BR.md`, `_includes/nav.html`, `_includes/footer.html`, etc.) during experiment work.
-- Experiment pages must include experiment-specific partials (e.g. `{% include experiment-nav.html %}` instead of `{% include nav.html %}`).
-- All experiment permalinks must use the `experiment-` prefix to keep URLs distinct from production paths.
-- Experiment content is validated locally at `/experiment/` and related prefixed paths.
-- Only after explicit approval should experiment content be copied to production files
-(remove the `experiment-` prefix and update includes to production partials).
-- All stable string IDs in experiment files should have "experiment-" prefix.
+- Each experiment is a self-contained sandbox with a dedicated source folder:
+  - pages in `experiments/<name>/` (filenames still keep the `experiment-` prefix),
+  - partials in `_includes/<name>/` (referenced as `{% include <name>/header.html %}`),
+  - layout `_layouts/<name>.html`,
+  - own catalog dir `_data/locales/<name>/`,
+  - own stylesheet under `assets/css/` (do not reuse production `main.scss`).
+- All experiment permalinks must use the `experiment-` prefix to keep URLs distinct from
+  production paths (e.g. `/experiment/`, `/experiment-modern/`, `/experiment-timelapses/`,
+  `/experiment-eo-datasets/` plus their `/pt-BR/…` variants).
+- Do not edit production files (`index.md`, `index.pt-BR.md`, `_includes/nav.html`,
+  `_includes/footer.html`, `assets/css/main.scss`, top-level `_data/locales/*.yml`) during
+  experiment work.
+- Translation keys are NOT shared across realms. Each sandbox catalog carries its own copies of
+  any shared strings (nav model, footer, EO stats) under the `experiment-` prefixed names.
+- Only after explicit approval should experiment content be promoted to production: copy the
+  excerpt + its keys into the production catalog, strip the `experiment-` prefix, and move the
+  markup into production partials.
+- All stable string IDs in experiment files must be prefixed (`experiment_*`,
+  `experiment_modern_*`, `experiment_timelapses_*`).
+- Experiment content is validated locally at the prefixed paths (e.g. `/experiment/`).
 
 ## Assets & links
 

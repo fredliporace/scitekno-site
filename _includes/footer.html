@@ -5,9 +5,5 @@
     <span>{{ t.footer_location }}</span>
     <span>{{ t.status_reach_us }} <a href="mailto:contact@scitekno.com.br">contact@scitekno.com.br</a></span>
   </div>
-  {% if page.permalink contains '/experiment' %}
-    {% include experiment-lang-switcher.html %}
-  {% else %}
-    {% include lang-switcher.html %}
-  {% endif %}
+  {% include lang-switcher.html %}
 </footer>

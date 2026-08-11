@@ -1,10 +1,9 @@
-{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}
+{% assign t = site.data.locales["experiment-modern"][page.lang] | default: site.data.locales["experiment-modern"][site.default_lang] %}
 
-<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/experiment-modern.css">
 
 <div class="em-root">
 
-  {% include experiment-modern-nav.html %}
+  {% include experiment-modern/nav.html %}
 
   <main class="em-main">
 
@@ -57,12 +56,12 @@
               </svg>
               <div class="em-chiprow">
                 <div class="em-chip">
-                  <div class="em-chip__num"><em>{{ t.eo_stat_1_number }}</em></div>
-                  <span class="em-chip__label">{{ t.eo_stat_1_label }}</span>
+                  <div class="em-chip__num"><em>{{ t.experiment_modern_eo_stat_1_number }}</em></div>
+                  <span class="em-chip__label">{{ t.experiment_modern_eo_stat_1_label }}</span>
                 </div>
                 <div class="em-chip">
-                  <div class="em-chip__num"><em>{{ t.eo_stat_2_number }}</em></div>
-                  <span class="em-chip__label">{{ t.eo_stat_2_label }}</span>
+                  <div class="em-chip__num"><em>{{ t.experiment_modern_eo_stat_2_number }}</em></div>
+                  <span class="em-chip__label">{{ t.experiment_modern_eo_stat_2_label }}</span>
                 </div>
               </div>
             </div>
@@ -159,14 +158,14 @@
         <div class="row g-4 justify-content-center text-center">
           <div class="col-6 col-md-4 col-lg-3">
             <div class="em-stat">
-              <div class="em-stat__num"><em>{{ t.eo_stat_1_number }}</em></div>
-              <span class="em-stat__label">{{ t.eo_stat_1_label }}</span>
+              <div class="em-stat__num"><em>{{ t.experiment_modern_eo_stat_1_number }}</em></div>
+              <span class="em-stat__label">{{ t.experiment_modern_eo_stat_1_label }}</span>
             </div>
           </div>
           <div class="col-6 col-md-4 col-lg-3">
             <div class="em-stat">
-              <div class="em-stat__num"><em>{{ t.eo_stat_2_number }}</em></div>
-              <span class="em-stat__label">{{ t.eo_stat_2_label }}</span>
+              <div class="em-stat__num"><em>{{ t.experiment_modern_eo_stat_2_number }}</em></div>
+              <span class="em-stat__label">{{ t.experiment_modern_eo_stat_2_label }}</span>
             </div>
           </div>
         </div>
@@ -197,7 +196,7 @@
 
   </main>
 
-  {% include experiment-modern-footer.html %}
+  {% include experiment-modern/footer.html %}
 
 </div>
 

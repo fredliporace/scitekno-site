@@ -1,4 +1,4 @@
-{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}
+{% assign t = site.data.locales["experiment-modern"][page.lang] | default: site.data.locales["experiment-modern"][site.default_lang] %}
 {% assign is_home = false %}
 {% if page.permalink == '/experiment-modern/' or page.permalink == '/pt-BR/experiment-modern/' %}{% assign is_home = true %}{% endif %}
 {% assign is_timelapses = false %}
@@ -8,17 +8,17 @@
     <nav class="em-navbar__inner" aria-label="Main">
       <a class="em-brand" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/">
         <span class="em-brand__mark">✹</span>
-        {{ t.nav_brand }}
+        {{ t.experiment_modern_nav_brand }}
       </a>
       <ul class="em-navlist">
-        <li><a class="em-navlink {% if is_home %}em-navlink--active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/">{{ t.nav_home }}</a></li>
+        <li><a class="em-navlink {% if is_home %}em-navlink--active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/">{{ t.experiment_modern_nav_home }}</a></li>
         <li><a class="em-navlink" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/#features">{{ t.experiment_modern_nav_features }}</a></li>
         <li><a class="em-navlink" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/#pipeline">{{ t.experiment_modern_nav_pipeline }}</a></li>
         <li><a class="em-navlink {% if is_timelapses %}em-navlink--active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-timelapses/">{{ t.experiment_modern_nav_timelapses }}</a></li>
         <li><a class="em-navlink" href="#contact">{{ t.experiment_modern_nav_contact }}</a></li>
       </ul>
       <div class="em-navbar__actions">
-        {% include experiment-modern-lang-switcher.html %}
+        {% include experiment-modern/lang-switcher.html %}
         <a href="mailto:contact@scitekno.com.br" class="em-btn em-btn--solid">{{ t.experiment_modern_hero_cta }}</a>
       </div>
     </nav>

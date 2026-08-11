@@ -1,0 +1,66 @@
+# Experiment sandbox — English (fully self-contained, no keys shared with production).
+# Prefix `experiment-` marks these strings as belonging to the experiment sandbox.
+
+# Shared navbar (copied from production, prefixed)
+experiment_nav_brand: "SCITEKNO"
+experiment_nav_home: "Home"
+experiment_nav_eo_datasets: "EO Datasets on AWS"
+experiment_nav_contact: "Contact"
+experiment_nav_toggle: "Toggle navigation"
+
+# Shared footer (copied from production, prefixed)
+experiment_footer_entity: "SCITEKNO SERVIÇOS EM INFORMÁTICA"
+experiment_footer_location: "RIO DE JANEIRO, BRAZIL"
+experiment_status_reach_us: "Reach us at"
+
+# EO Datasets page (copied from production, prefixed)
+experiment_eo_eyebrow: "EARTH OBSERVATION"
+experiment_eo_title: "EO Datasets on AWS"
+experiment_eo_tagline: "CBERS and Amazonia-1 imagery on AWS"
+experiment_eo_lead: "SCITEKNO is a partner of the Earth on AWS program since 2018, providing access to CBERS-4, CBERS-4A and Amazonia-1 imagery on AWS."
+experiment_eo_cta_button: "Contact us"
+
+# Experiment page
+experiment_eyebrow: "COMPONENT PLAYGROUND"
+experiment_title: "Bootstrap 5 Components — Experiment"
+experiment_lead: "This page is a sandbox for Bootstrap 5 components before migrating the main landing page."
+experiment_nav_title: "Navbar"
+experiment_carousel_title: "Carousel"
+experiment_carousel_title_1: "Slide One"
+experiment_carousel_text_1: "Caption text for the first slide."
+experiment_carousel_title_2: "Slide Two"
+experiment_carousel_text_2: "Caption text for the second slide."
+experiment_carousel_title_3: "Slide Three"
+experiment_carousel_text_3: "Caption text for the third slide."
+experiment_carousel_prev: "Previous"
+experiment_carousel_next: "Next"
+experiment_cards_title: "Cards"
+experiment_card_1_title: "Card One"
+experiment_card_1_text: "Example card body text."
+experiment_card_1_cta: "Action"
+experiment_card_2_title: "Card Two"
+experiment_card_2_text: "Another example card body text."
+experiment_card_2_cta: "Action"
+experiment_card_3_title: "Card Three"
+experiment_card_3_text: "More example card body text."
+experiment_card_3_cta: "Action"
+experiment_stats_title: "Number Widgets"
+experiment_stat_1_number: "24"
+experiment_stat_1_label: "Projects"
+experiment_stat_2_number: "12"
+experiment_stat_2_label: "Countries"
+experiment_stat_3_number: "99.9%"
+experiment_stat_3_label: "Uptime"
+experiment_stat_4_number: "8"
+experiment_stat_4_label: "Years"
+experiment_cta_title: "Call to Action"
+experiment_cta_text: "A simple centered CTA block using Bootstrap utilities."
+experiment_cta_button: "Contact us"
+
+# EO Datasets — experiment text (own copy)
+experiment_eo_text_1: "Our pipelines turn raw downlink into analysis-ready products, with validated radiometric and geometric quality suitable for science and operational use."
+experiment_eo_text_2: "Data is processed through quality-assessed workflows before delivery, ensuring consistency for time-series and change-detection applications."
+experiment_eo_stat_1_number: "6.54M"
+experiment_eo_stat_1_label: "Objects"
+experiment_eo_stat_2_number: "228.66 T"
+experiment_eo_stat_2_label: "Storage"

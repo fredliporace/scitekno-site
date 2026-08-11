@@ -1,0 +1,9 @@
+{% assign t = site.data.locales["experiment"][page.lang] | default: site.data.locales["experiment"][site.default_lang] %}
+<footer id="contact">
+  <div class="row">
+    <span>{{ t.experiment_footer_entity }}</span>
+    <span>{{ t.experiment_footer_location }}</span>
+    <span>{{ t.experiment_status_reach_us }} <a href="mailto:contact@scitekno.com.br">contact@scitekno.com.br</a></span>
+  </div>
+  {% include experiment/lang-switcher.html %}
+</footer>

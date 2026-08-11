@@ -11,7 +11,9 @@
   `rm -rf _site` before `bundle exec jekyll serve --livereload --host 0.0.0.0 --port 4000`.
   Watch-mode regeneration does NOT delete orphaned files from `_site`, so stale output (e.g.
   leftover localized subdirs from an old i18n setup) can linger and produce wrong URLs or
-  directory listings instead of the page.
+  directory listings instead of the page. Because experiment sources now live under
+  `experiments/<name>/`, renaming or moving a sandbox also requires a clean rebuild so stale
+  sandbox output is dropped from `_site`.
 
 ## GitHub Pages / deploy constraints
 
@@ -29,19 +31,22 @@
 
 - Pages in root or `_pages/`; layouts in `_layouts/`, partials in `_includes/`,
   structured data in `_data/` (`.yml`/`.yaml`).
+- Production pages live in root; experiment pages under `experiments/<name>/`.
 - Use `{% include %}` for header/footer/nav; avoid duplicating markup.
 - Put reusable CSS in `assets/css/main.scss` or the layout, NOT inline per page.
 - Keep markdown content in `.md` files with front matter; let Jekyll render it.
 
 ## i18n — data-driven, plugin-free (HARD CONSTRAINT)
 
-- All user-facing copy lives in `_data/locales/*.yml` — one file per language (`en.yml`,
-  `pt-BR.yml`), keyed by stable string IDs. This is the single "strings file" to edit for
-  translations.
-- Always keep "experiment-" keys at the end of the file.
-- Templates read copy via
-  `{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}`
-  then `{{ t.key }}`. Never hardcode user-facing text in templates/pages.
+- All user-facing copy lives in `_data/locales/**/*.yml`, grouped by realm — production at
+  `_data/locales/`, each experiment sandbox at `_data/locales/<sandbox>/` — keyed by stable
+  string IDs. Never hardcode user-facing text in templates/pages.
+- Templates resolve their realm's catalog, then `{{ t.key }}`:
+  - Production:
+    `{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}`
+  - Experiment:
+    `{% assign t = site.data.locales["<sandbox>"][page.lang] | default: site.data.locales["<sandbox>"][site.default_lang] %}`
+    (use bracket access for names with hyphens, e.g. `site.data.locales["experiment-modern"]`).
 - Per-language routing via front matter:
   - `index.md` → `lang: en`, `permalink: /`
   - `index.pt-BR.md` → `lang: pt-BR`, `permalink: /pt-BR/`
@@ -78,6 +83,13 @@
   - layout `_layouts/<name>.html`,
   - own catalog dir `_data/locales/<name>/`,
   - own stylesheet under `assets/css/` (do not reuse production `main.scss`).
+- Each sandbox layout/header must `<link>` **only** that sandbox's own stylesheet
+  (`experiment.scss`, `experiment-modern.scss`) — never production `assets/css/main.scss`.
+- To add an experiment, create in parallel: `experiments/<name>/*.md`,
+  `_includes/<name>/*.html`, `_layouts/<name>.html`,
+  `_data/locales/<name>/{en,pt-BR}.yml`, and `assets/css/<name>.scss`; point the new layout's
+  `<head>` at the new stylesheet, prefix all stable keys with `experiment-<name>_`, then run a
+  clean build and `ruby scripts/check-locales`.
 - All experiment permalinks must use the `experiment-` prefix to keep URLs distinct from
   production paths (e.g. `/experiment/`, `/experiment-modern/`, `/experiment-timelapses/`,
   `/experiment-eo-datasets/` plus their `/pt-BR/…` variants).
@@ -97,7 +109,7 @@
 
 - Use relative URLs / `{{ site.baseurl }}` so links work under any baseurl or language subpath.
 - Keep Google Fonts `<link>` in the layout `<head>`.
-- Respect `prefers-reduced-motion` for animations (already present in coming-soon CSS).
+- Respect `prefers-reduced-motion` for animations (already present in the sandbox stylesheets).
 - When adding centered content blocks (animations, widgets, hero elements), always use explicit
   centering: `margin: X auto Y` for block elements, or Bootstrap utilities like
   `justify-content-center` / `text-center`. Do not rely on parent container alignment alone
@@ -109,7 +121,8 @@
 - Validate YAML (`_config.yml`, `_data/*.yml`) and front matter before committing.
 - `bundle exec jekyll build` must be clean (no errors/warnings) before pushing.
 - `markdownlint` on `.md` files (extension installed in devcontainer).
-- Run `ruby scripts/check-locales` to confirm locale key parity.
+- Run `ruby scripts/check-locales` to confirm locale key parity in every realm (production
+  and each sandbox).
 - **Before finishing ANY task**, keep markdown warning-free (the VS Code Problems tab must
   show no markdownlint issues in edited files). Run `ruby scripts/lint-markdown` to check, or
   `ruby scripts/lint-markdown --fix` to auto-fix trailing whitespace / blank-line issues, then

@@ -51,8 +51,8 @@
 		}
 	],
 
-	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "bash .devcontainer/post-create.sh"
+	"postCreateCommand": "bash .devcontainer/post-create.sh",
+	"postStartCommand": "bash .devcontainer/start-jekyll.sh"
 
 	// // Environment variables
 	// "runArgs": [

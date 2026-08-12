@@ -32,7 +32,6 @@ sudo chown -R vscode:vscode /home/vscode/.ssh || true
 # Kilo persistence setup
 echo "=== Kilo persistence setup ==="
 sudo chown -R vscode:vscode /home/vscode/.config/kilo || true
-# sudo chown -R vscode:vscode /home/vscode/.local/share/kilo || true
 sudo chown -R vscode:vscode /home/vscode/.local || true
 
 # Ensure Kilo cache subdirectory exists

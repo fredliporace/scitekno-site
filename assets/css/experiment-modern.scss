@@ -352,7 +352,9 @@
   .em-holomap-layout{ grid-template-columns: 1fr; gap: 2rem; }
   .em-holomap__info{ max-width: none; }
   .em-holomap{ justify-self: stretch; }
-  .em-holomap__frame{ height: 440px; }
+  .em-holomap__frame{
+    height: clamp(360px, 65vh, 500px);
+  }
 }
 
 /* ---------- Callout linking to a topic page ---------- */

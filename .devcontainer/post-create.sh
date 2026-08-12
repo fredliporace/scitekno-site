@@ -1,8 +1,4 @@
-echo "=== Jekyll setup starting ==="
-
-bundle install
-
-echo "=== Jekyll setup completed ==="
+set -euo pipefail
 
 echo "=== Cline persistence setup starting ==="
 

@@ -1,13 +1,13 @@
 # Devcontainer
 
-## Automatic Jekyll startup
-
-Jekyll is started automatically when the container opens via `postStartCommand`.
-
 ## Manual start
 
 ```bash
-bash .devcontainer/start-jekyll.sh
+.devcontainer/post-start.sh
+```
+
+```bash
+.devcontainer/start-jekyll.sh
 ```
 
 Check logs:

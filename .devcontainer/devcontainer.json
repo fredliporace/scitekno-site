@@ -52,8 +52,8 @@
 	],
 
 	"postCreateCommand": "bash .devcontainer/post-create.sh"
-	// Safer to start from terminal	
-	// "postStartCommand": "bash .devcontainer/start-jekyll.sh"
+	// Build fails if this is run in postStartCommand
+	// "postStartCommand": "bash .devcontainer/post-start.sh"
 
 	// // Environment variables
 	// "runArgs": [

@@ -10,17 +10,36 @@
         <span class="em-brand__mark">✹</span>
         {{ t.experiment_modern_nav_brand }}
       </a>
-      <ul class="em-navlist">
-        <li><a class="em-navlink {% if is_home %}em-navlink--active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/">{{ t.experiment_modern_nav_home }}</a></li>
-        <li><a class="em-navlink" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/#features">{{ t.experiment_modern_nav_features }}</a></li>
-        <li><a class="em-navlink" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/#pipeline">{{ t.experiment_modern_nav_pipeline }}</a></li>
-        <li><a class="em-navlink {% if is_timelapses %}em-navlink--active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-timelapses/">{{ t.experiment_modern_nav_timelapses }}</a></li>
-        <li><a class="em-navlink" href="#contact">{{ t.experiment_modern_nav_contact }}</a></li>
-      </ul>
-      <div class="em-navbar__actions">
-        {% include experiment-modern/lang-switcher.html %}
-        <a href="mailto:contact@scitekno.com.br" class="em-btn em-btn--solid">{{ t.experiment_modern_hero_cta }}</a>
+      <button class="em-nav-toggle" aria-expanded="false" aria-controls="em-navmenu" aria-label="Toggle navigation">
+        <span></span>
+      </button>
+      <div class="em-nav-collapse" id="em-navmenu">
+        <ul class="em-navlist">
+          <li><a class="em-navlink {% if is_home %}em-navlink--active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/">{{ t.experiment_modern_nav_home }}</a></li>
+          <li><a class="em-navlink" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/#features">{{ t.experiment_modern_nav_features }}</a></li>
+          <li><a class="em-navlink" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-modern/#pipeline">{{ t.experiment_modern_nav_pipeline }}</a></li>
+          <li><a class="em-navlink {% if is_timelapses %}em-navlink--active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}experiment-timelapses/">{{ t.experiment_modern_nav_timelapses }}</a></li>
+          <li><a class="em-navlink" href="#contact">{{ t.experiment_modern_nav_contact }}</a></li>
+        </ul>
+        <div class="em-navbar__actions">
+          {% include experiment-modern/lang-switcher.html %}
+          <a href="mailto:contact@scitekno.com.br" class="em-btn em-btn--solid">{{ t.experiment_modern_hero_cta }}</a>
+        </div>
       </div>
     </nav>
   </div>
 </header>
+<script>
+  (function() {
+    var nav = document.querySelector('.em-nav');
+    if (!nav) return;
+    var toggle = nav.querySelector('.em-nav-toggle');
+    var target = document.getElementById('em-navmenu');
+    if (!toggle || !target) return;
+    toggle.addEventListener('click', function() {
+      var open = target.classList.toggle('is-open');
+      toggle.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  })();
+</script>

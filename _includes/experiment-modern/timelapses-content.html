@@ -19,6 +19,26 @@
       </div>
     </section>
 
+    <!-- FEATURED INTERACTIVE HOLOMAP (CBERS-4 PAN10M timelapse, Brumadinho) -->
+    <section class="em-section">
+      <div class="container">
+        <div class="em-holomap-layout">
+          <div class="em-holomap__info">
+            <p class="em-eyebrow">{{ t.experiment_timelapses_holomap_eyebrow }}</p>
+            <h2 class="em-section__title">{{ t.experiment_timelapses_holomap_title }}</h2>
+            <p class="em-holomap__lead">{{ t.experiment_timelapses_holomap_desc }}</p>
+          </div>
+          <div class="em-holomap">
+            <iframe
+              class="em-holomap__frame"
+              src="{{ site.baseurl }}/assets/holomaps/brumadinho_cb4_pan10.html"
+              title="{{ t.experiment_timelapses_holomap_title }}"
+              loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- GALLERY (loops over _data/timelapses.yml) -->
     <section class="em-section em-section--alt">
       <div class="container">

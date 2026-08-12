@@ -21,6 +21,8 @@ experiment_modern_eo_stat_1_number: "6,54M"
 experiment_modern_eo_stat_1_label: "Objetos"
 experiment_modern_eo_stat_2_number: "228,66 T"
 experiment_modern_eo_stat_2_label: "Armazenamento"
+experiment_modern_eo_stat_3_number: "1,1M"
+experiment_modern_eo_stat_3_label: "Itens STAC"
 
 # Protótipo moderno
 experiment_modern_hero_eyebrow: "OBSERVAÇÃO DA TERRA × INFRAESTRUTURA EM NUVEM"
@@ -67,3 +69,8 @@ experiment_timelapses_item_3_title: "Bacia amazônica, respirando por estações
 experiment_timelapses_item_3_desc: "Ciclos de cheia e seca nas planícies alagáveis e nos rios sinuosos."
 experiment_timelapses_item_4_title: "Passagens noturnas em infravermelho termal"
 experiment_timelapses_item_4_desc: "Nuvens e frentes quentes brilhando contra o frio do espaço em faixas noturnas."
+
+# Holomap interativo em destaque (CBERS-4 PAN10M, Brumadinho)
+experiment_timelapses_holomap_eyebrow: "INTERATIVO"
+experiment_timelapses_holomap_title: "Brumadinho · CBERS-4 PAN10M"
+experiment_timelapses_holomap_desc: "Uma visão interativa de vários anos da região de Brumadinho a partir de imagens CBERS-4 PAN10M. Arraste o controle de tempo para percorrer cada cena."

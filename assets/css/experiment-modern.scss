@@ -40,7 +40,7 @@
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--em-line);
 }
-.em-navbar__inner{ display: flex; align-items: center; gap: 2rem; padding: 0.9rem 0; }
+.em-navbar__inner{ display: flex; align-items: center; gap: 1.5rem; padding: 0.9rem 0; }
 .em-brand{
   display: inline-flex; align-items: center; gap: 0.55rem;
   font-family: var(--em-font-sans); font-weight: 700;
@@ -65,7 +65,7 @@
 .em-btn{
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   padding: 0.7rem 1.4rem; border-radius: 999px; font-weight: 600; font-size: 0.95rem;
-  white-space: nowrap;
+  white-space: nowrap; max-width: 100%; overflow-wrap: break-word;
   transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
 }
 .em-btn--solid{ background: var(--em-grad); color: #071018; box-shadow: 0 6px 24px rgba(79,168,224,0.35); }
@@ -100,7 +100,7 @@
   letter-spacing: -0.02em; line-height: 1.02; margin: 0 0 1.4rem;
 }
 .em-hero__lead{
-  color: var(--em-muted); font-size: 1.1rem; line-height: 1.7; max-width: 33rem; margin-bottom: 2rem;
+  color: var(--em-muted); font-size: 1.1rem; line-height: 1.7; max-width: 33rem; margin-bottom: 2rem; overflow-wrap: break-word;
 }
 .em-hero__cta{ display: flex; flex-wrap: wrap; gap: 0.9rem; }
 
@@ -140,12 +140,12 @@
 
 .em-chiprow{ display: flex; gap: 1rem; margin-top: 1.4rem; }
 .em-chip{
-  flex: 1; border-radius: 14px; padding: 0.9rem 1.1rem;
+  flex: 1; min-width: 0; border-radius: 14px; padding: 0.9rem 1.1rem;
   background: var(--em-panel); border: 1px solid var(--em-line);
 }
-.em-chip__num{ font-family: var(--em-font-sans); font-weight: 700; font-size: 1.6rem; line-height: 1; }
+.em-chip__num{ font-family: var(--em-font-sans); font-weight: 700; font-size: 1.6rem; line-height: 1; overflow-wrap: break-word; }
 .em-chip__num em{ font-style: normal; background: var(--em-grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.em-chip__label{ display: block; margin-top: 0.3rem; font-family: var(--em-font-mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--em-muted); }
+.em-chip__label{ display: block; margin-top: 0.3rem; font-family: var(--em-font-mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--em-muted); overflow-wrap: break-word; }
 
 /* ---------- Sections ---------- */
 .em-section{ padding: clamp(3rem, 7vw, 5.5rem) 0; }
@@ -156,7 +156,7 @@
 
 /* ---------- Feature cards ---------- */
 .em-feature{
-  height: 100%;
+  height: 100%; min-width: 0;
   border-radius: var(--em-radius);
   padding: 1.9rem 1.7rem;
   background: var(--em-panel);
@@ -177,12 +177,12 @@
 }
 .em-feature__icon svg{ display: block; }
 .em-feature__title{ font-family: var(--em-font-sans); font-weight: 600; font-size: 1.15rem; margin-bottom: 0.5rem; }
-.em-feature__text{ color: var(--em-muted); font-size: 0.96rem; line-height: 1.6; margin: 0; }
+.em-feature__text{ color: var(--em-muted); font-size: 0.96rem; line-height: 1.6; margin: 0; overflow-wrap: break-word; }
 
 /* ---------- Pipeline steps ---------- */
 .em-steps{ display: grid; gap: 1rem; }
 .em-step{
-  display: flex; gap: 1.2rem; align-items: flex-start;
+  display: flex; gap: 1.2rem; align-items: flex-start; min-width: 0;
   border-radius: var(--em-radius); padding: 1.5rem;
   background: var(--em-panel); border: 1px solid var(--em-line);
   transition: transform .2s ease, background .2s ease, border-color .2s ease;
@@ -194,17 +194,17 @@
   background: var(--em-grad); box-shadow: 0 0 20px rgba(79,224,201,0.3);
 }
 .em-step__title{ font-weight: 600; font-size: 1.05rem; margin-bottom: 0.3rem; }
-.em-step__text{ color: var(--em-muted); font-size: 0.96rem; line-height: 1.55; margin: 0; }
+.em-step__text{ color: var(--em-muted); font-size: 0.96rem; line-height: 1.55; margin: 0; overflow-wrap: break-word; }
 
 /* ---------- Stats ---------- */
 .em-stat{
   text-align: center; border-radius: var(--em-radius); padding: 2rem 1.4rem;
   background: var(--em-panel); border: 1px solid var(--em-line); height: 100%;
-  position: relative; overflow: hidden;
+  position: relative; overflow: hidden; min-width: 0;
 }
-.em-stat__num{ font-family: var(--em-font-sans); font-weight: 700; font-size: clamp(2rem, 4vw, 2.9rem); letter-spacing: -0.02em; line-height: 1; }
+.em-stat__num{ font-family: var(--em-font-sans); font-weight: 700; font-size: clamp(2rem, 4vw, 2.9rem); letter-spacing: -0.02em; line-height: 1; overflow-wrap: break-word; }
 .em-stat__num em{ font-style: normal; background: var(--em-grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.em-stat__label{ display: block; margin-top: 0.4rem; font-family: var(--em-font-mono); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--em-muted); text-transform: uppercase; }
+.em-stat__label{ display: block; margin-top: 0.4rem; font-family: var(--em-font-mono); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--em-muted); text-transform: uppercase; overflow-wrap: break-word; }
 
 /* ---------- CTA ---------- */
 .em-cta{
@@ -227,7 +227,7 @@
 }
 .em-footer__grid{ display: grid; grid-template-columns: 2fr 1fr 1.4fr; gap: 2.5rem; margin-bottom: 2.5rem; }
 .em-footer__brand{ font-family: var(--em-font-sans); font-weight: 700; font-size: 1.1rem; color: var(--em-text); display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.8rem; }
-.em-footer__tagline{ line-height: 1.6; max-width: 26rem; margin: 0; }
+.em-footer__tagline{ line-height: 1.6; max-width: 26rem; margin: 0; overflow-wrap: break-word; }
 .em-footer__heading{ font-family: var(--em-font-sans); font-weight: 600; color: var(--em-text); margin-bottom: 0.9rem; font-size: 0.95rem; }
 .em-footer__links{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
 .em-footer__links a{ color: var(--em-muted); }
@@ -260,6 +260,12 @@
 /* ---------- Responsive ---------- */
 @media (max-width: 991.98px){
   .em-footer__grid{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 899.98px){
+  .em-navbar__inner{ flex-wrap: wrap; gap: 0.8rem; }
+  .em-navlist{ margin-inline-end: 0; width: 100%; order: 3; flex-wrap: wrap; gap: 0.35rem 0.5rem; }
+  .em-navlist li{ flex: none; }
+  .em-navbar__actions{ margin-inline-start: auto; flex-wrap: wrap; gap: 0.5rem; }
 }
 @media (max-width: 767.98px){
   .em-navbar__inner{ flex-wrap: wrap; gap: 0.9rem 1rem; }
@@ -329,7 +335,7 @@
 }
 .em-callout .em-eyebrow{ margin-bottom: 0.6rem; }
 .em-callout__title{ font-family: var(--em-font-sans); font-weight: 700; font-size: 1.4rem; margin: 0 0 0.4rem; }
-.em-callout__text{ color: var(--em-muted); margin: 0; max-width: 34rem; line-height: 1.6; }
+.em-callout__text{ color: var(--em-muted); margin: 0; max-width: 34rem; line-height: 1.6; overflow-wrap: break-word; }
 
 @media (prefers-reduced-motion: reduce){
   .em-tile{ transition: none; }
@@ -337,7 +343,7 @@
   .em-callout{ transition: none; }
 }
 @media (max-width: 767.98px){
-  .em-callout{ flex-direction: column; align-items: stretch; text-align: left; }
+  .em-callout{ flex-direction: column; align-items: stretch; text-align: left; padding: 1.6rem; }
 }
 
 /* ---------- Fix text color being overridden by `.em-root a` (specificity) ---------- */

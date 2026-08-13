@@ -1,22 +1,43 @@
 {% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded mb-4">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}">{{ t.nav_brand }}</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-controls="siteNav" aria-expanded="false" aria-label="{{ t.nav_toggle }}">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="siteNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link {% if page.permalink == '/' or page.permalink == '/pt-BR/' %}active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}" aria-current="{% if page.permalink == '/' or page.permalink == '/pt-BR/' %}page{% endif %}">{{ t.nav_home }}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if page.permalink == '/eo-datasets/' or page.permalink == '/pt-BR/eo-datasets/' %}active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}eo-datasets/">{{ t.nav_eo_datasets }}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#contact">{{ t.nav_contact }}</a>
-        </li>
-      </ul>
-    </div>
+{% assign is_home = false %}
+{% if page.permalink == '/' or page.permalink == '/pt-BR/' %}{% assign is_home = true %}{% endif %}
+<header class="em-nav">
+  <div class="container">
+    <nav class="em-navbar__inner" aria-label="Main">
+      <a class="em-brand" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}">
+        <span class="em-brand__mark">✹</span>
+        {{ t.nav_brand }}
+      </a>
+      <button class="em-nav-toggle" aria-expanded="false" aria-controls="em-navmenu" aria-label="{{ t.nav_toggle }}">
+        <span></span>
+      </button>
+      <div class="em-nav-collapse" id="em-navmenu">
+        <ul class="em-navlist">
+          <li><a class="em-navlink {% if is_home %}em-navlink--active{% endif %}" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}">{{ t.nav_home }}</a></li>
+          <li><a class="em-navlink" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}#features">{{ t.nav_features }}</a></li>
+          <li><a class="em-navlink" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}#pipeline">{{ t.nav_pipeline }}</a></li>
+          <li><a class="em-navlink" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}timelapses/">{{ t.nav_timelapses }}</a></li>
+          <li><a class="em-navlink" href="#contact">{{ t.nav_contact }}</a></li>
+        </ul>
+        <div class="em-navbar__actions">
+          {% include lang-switcher.html %}
+          <a href="mailto:contact@scitekno.com.br" class="em-btn em-btn--solid">{{ t.hero_cta }}</a>
+        </div>
+      </div>
+    </nav>
   </div>
-</nav>
+</header>
+<script>
+  (function() {
+    var nav = document.querySelector('.em-nav');
+    if (!nav) return;
+    var toggle = nav.querySelector('.em-nav-toggle');
+    var target = document.getElementById('em-navmenu');
+    if (!toggle || !target) return;
+    toggle.addEventListener('click', function() {
+      var open = target.classList.toggle('is-open');
+      toggle.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  })();
+</script>

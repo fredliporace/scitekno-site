@@ -1,4 +1,3 @@
-{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}
 {% assign en_href = page.permalink | replace: '/pt-BR/', '/' %}
 {% if page.lang == 'en' %}
   {% assign pt_href = '/pt-BR' | append: page.permalink %}
@@ -6,10 +5,10 @@
   {% assign pt_href = page.permalink %}
 {% endif %}
 
-<div class="lang-switcher">
+<div class="em-lang" role="group" aria-label="Language">
   {% for lang in site.languages %}
     {% if lang == page.lang %}
-      <span class="lang-active">{{ lang }}</span>
+      <span class="em-lang__active">{{ lang }}</span>
     {% else %}
       {% if lang == 'en' %}
         <a href="{{ en_href }}" hreflang="{{ lang }}" data-lang="{{ lang }}">{{ lang }}</a>
@@ -17,16 +16,13 @@
         <a href="{{ pt_href }}" hreflang="{{ lang }}" data-lang="{{ lang }}">{{ lang }}</a>
       {% endif %}
     {% endif %}
-    {% if forloop.last == false %}
-      <span class="lang-sep">·</span>
-    {% endif %}
   {% endfor %}
 </div>
 <script>
 // Record a manual language choice so the auto-redirect (lang-redirect.html)
 // does not override it during this tab session.
 (function () {
-  var links = document.querySelectorAll('.lang-switcher a[data-lang]');
+  var links = document.querySelectorAll('.em-lang a[data-lang]');
   for (var i = 0; i < links.length; i++) {
     links[i].addEventListener('click', function () {
       try {

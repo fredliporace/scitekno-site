@@ -160,10 +160,11 @@
 .em-chip{
   flex: 1; min-width: 0; border-radius: 14px; padding: 0.9rem 1.1rem;
   background: var(--em-panel); border: 1px solid var(--em-line);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
 }
-.em-chip__num{ font-family: var(--em-font-sans); font-weight: 700; font-size: 1.6rem; line-height: 1; overflow-wrap: break-word; }
+.em-chip__num{ font-family: var(--em-font-sans); font-weight: 700; font-size: 1.6rem; line-height: 1; overflow-wrap: break-word; white-space: nowrap; }
 .em-chip__num em{ font-style: normal; background: var(--em-grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.em-chip__label{ display: block; margin-top: 0.3rem; font-family: var(--em-font-mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--em-muted); overflow-wrap: break-word; }
+.em-chip__label{ display: block; margin-top: 0.3rem; font-family: var(--em-font-mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--em-muted); overflow-wrap: break-word; white-space: nowrap; }
 
 /* ---------- Sections ---------- */
 .em-section{ padding: clamp(3rem, 7vw, 5.5rem) 0; }
@@ -305,6 +306,10 @@
   .em-footer__grid{ grid-template-columns: 1fr; gap: 2rem; }
   .em-hero__cta{ flex-direction: column; align-items: stretch; }
   .em-cta{ padding-left: 1rem; padding-right: 1rem; }
+  .em-chiprow{ gap: 0.6rem; }
+  .em-chip{ padding: 0.7rem 0.5rem; }
+  .em-chip__num{ font-size: clamp(1.2rem, 4vw, 1.6rem); }
+  .em-chip__label{ font-size: clamp(0.6rem, 2.2vw, 0.7rem); letter-spacing: 0.04em; }
 }
 /* ---------- Active nav link ---------- */
 .em-navlink--active{ background: rgba(79,224,201,0.12); color: var(--em-cyan); }

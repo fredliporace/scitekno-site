@@ -13,15 +13,9 @@
         background-color: #0A1120;
         color: #EAF0FB;
       }
-      /* Force the Panel/Bokeh widget text to the site's light tone (overrides the
-         widget's own theme which hardcodes dark text). Canvas-rendered content
-         (map image, title, axes) is unaffected. */
-      body * { color: #EAF0FB !important; }
-      .bk-root *, .pn-root * { color: #EAF0FB !important; }
-      .bk-root, .pn-root, .bk, .pn-widget-box { background: transparent !important; }
-      #ca0fec66-6a5c-4a0c-a8d7-b8686db259e6 > div > div > div > div > div,
-      .bk-input, .bk-slider, .bk-slider-title { color: #EAF0FB !important; }
-      .bk-root .bk-clearfix, .bk-root [class*="bk-"], .pn-widget { color: #EAF0FB !important; }
+      .bk-toolbar {
+        background: #0A1120 !important;
+      }
     </style>
 <script type="esms-options">{"shimMode": true}</script>
 
@@ -78,44 +72,24 @@
     </script>
     <script>
       (function() {
-        var css = ':host,:host *,*{color:#EAF0FB !important;background:transparent !important} :host::before,:host::after,*::before,*::after{color:#EAF0FB !important;background:transparent !important} html,body,body *{color:#EAF0FB !important;background:transparent !important} .bk-root *, .pn-root *, .bk *, .pn-widget *{color:#EAF0FB !important;background:transparent !important} .bk-root,.pn-root,.bk,.pn-widget-box{background:transparent !important}';
-        var style = document.createElement('style');
-        style.id = 'scitekno-holomap-fix';
-        style.textContent = css;
-        function injectIntoShadowRoot(shadowRoot) {
-          if (!shadowRoot.querySelector('#scitekno-holomap-fix')) {
-            try {
-              var clone = style.cloneNode(true);
-              clone.id = 'scitekno-holomap-fix-shadow';
-              shadowRoot.appendChild(clone);
-            } catch(e) {}
-          }
-          var innerElements = shadowRoot.querySelectorAll('*');
-          for (var i = 0; i < innerElements.length; i++) {
-            if (innerElements[i].shadowRoot) {
-              injectIntoShadowRoot(innerElements[i].shadowRoot);
+        const styleText = ':host{--panel-background-color:#0A1120;--panel-on-background-color:#FFFFFF}.bk-slider,.bk-slider *{background:#0A1120 !important;color:#FFFFFF !important}';
+        function injectInto(el) {
+          if (el.shadowRoot) {
+            let style = el.shadowRoot.querySelector('style[data-scitekno-fix]');
+            if (!style) {
+              style = document.createElement('style');
+              style.setAttribute('data-scitekno-fix', '');
+              style.textContent = styleText;
+              el.shadowRoot.appendChild(style);
             }
           }
         }
-        function inject() {
-          if (!document.head.contains(style)) {
-            document.head.appendChild(style);
-          }
-          var all = document.querySelectorAll('*');
-          for (var i = 0; i < all.length; i++) {
-            if (all[i].shadowRoot) {
-              injectIntoShadowRoot(all[i].shadowRoot);
-            }
-          }
+        function walkAndInject(root) {
+          injectInto(root);
+          if (root.shadowRoot) Array.from(root.shadowRoot.children).forEach(walkAndInject);
+          Array.from(root.children).forEach(walkAndInject);
         }
-        var observer = new MutationObserver(inject);
-        observer.observe(document.documentElement, { subtree: true, childList: true });
-        if (document.readyState !== 'loading') {
-          inject();
-        } else {
-          document.addEventListener('DOMContentLoaded', inject);
-        }
-        setInterval(inject, 500);
+        setInterval(() => document.querySelectorAll('.bk-Row').forEach(walkAndInject), 500);
       })();
     </script>
   </body>

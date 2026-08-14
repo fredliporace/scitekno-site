@@ -64,9 +64,6 @@ cta_eyebrow: "ENTRE EM CONTATO"
 cta_title: "Vamos construir seu segmento terrestre"
 cta_text: "Fale conosco sobre pipelines, qualidade de dados e infraestrutura em nuvem para suas imagens."
 
-eo_stat_3_number: "1,1M"
-eo_stat_3_label: "Itens STAC"
-
 # Página EO Datasets
 eo_eyebrow: "OBSERVAÇÃO DA TERRA"
 eo_title: "Datasets EO na AWS"
@@ -78,4 +75,6 @@ eo_stat_1_number: "6.54M"
 eo_stat_1_label: "Objetos S3"
 eo_stat_2_number: "228T"
 eo_stat_2_label: "Armazenamento"
+eo_stat_3_number: "1.1M"
+eo_stat_3_label: "Itens STAC"
 eo_text_3: "Os recursos AWS são descritos no Registry of Open Data: <a href='https://registry.opendata.aws/cbers/'>CBERS</a> and <a href='https://registry.opendata.aws/amazonia/'>Amazonia-1</a>."

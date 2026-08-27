@@ -1,1 +1,21 @@
-{ "name": "scitekno-website", "compatibility_date": "2026-08-27", "assets": { "directory": "_site" } }
+{
+    "name": "scitekno-website",
+    "compatibility_date": "2026-08-27",
+    "assets": {
+        "directory": "_site"
+    },
+    // 1. Global / Production variables (Used by your main branch)
+    "vars": {
+        "LANG": "C.UTF-8",
+        "LC_ALL": "C.UTF-8"
+    },
+    // 2. Environment routing (Used by your dev branch)
+    "env": {
+        "preview": {
+            "vars": {
+                "LANG": "C.UTF-8",
+                "LC_ALL": "C.UTF-8"
+            }
+        }
+    }
+}

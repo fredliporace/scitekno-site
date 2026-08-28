@@ -1,6 +1,6 @@
 # Devcontainer
 
-## Manual start
+## Manual jekyll start
 
 ```bash
 .devcontainer/post-start.sh

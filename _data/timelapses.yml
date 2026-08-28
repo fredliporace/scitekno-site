@@ -1,0 +1,24 @@
+# Timelapses index — sections and items.
+#
+# Flat list; the index page groups items by `section` (Liquid `group_by`).
+# `section` is an underscore id used for grouping and as the locale-key suffix
+# (timelapses_section_<section>_title). `section_slug` is the URL path segment
+# (may contain hyphens). `slug` is the per-item URL segment.
+#
+# Per-item copy is data-driven via the check-locales idiom:
+#   timelapses_<copy_id>_title / timelapses_<copy_id>_desc
+# defined in _data/locales/{en,pt-BR}.yml.
+
+- copy_id: brumadinho
+  section: mining
+  section_slug: mining
+  slug: brumadinho
+  type: holomap
+  asset: assets/holomaps/brumadinho_cb4_pan10.html
+
+- copy_id: arena_baixada
+  section: soccer_stadiums
+  section_slug: soccer-stadiums
+  slug: arena-baixada
+  type: holomap
+  asset: assets/holomaps/arena_baixada_cb4_pan10.html

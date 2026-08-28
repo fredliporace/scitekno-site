@@ -19,25 +19,41 @@
       </div>
     </section>
 
-    <!-- FEATURED INTERACTIVE HOLOMAP (CBERS-4 PAN10M timelapse, Brumadinho) -->
-    <section class="em-section">
-      <div class="container">
-        <div class="em-holomap-layout">
-          <div class="em-holomap__info">
-            <p class="em-eyebrow">{{ t.timelapses_holomap_eyebrow }}</p>
-            <h2 class="em-section__title">{{ t.timelapses_holomap_title }}</h2>
-            <p class="em-holomap__lead">{{ t.timelapses_holomap_desc }}</p>
+    <!-- SECTIONS / TIMELAPSE CARDS (grouped by `section`, data-driven) -->
+    <div class="em-timelapses">
+      {% assign last_section = '' %}
+      {% for item in site.data.timelapses %}
+        {% if item.section != last_section %}
+          {% unless forloop.first %}</div></div></section>{% endunless %}
+          {% case item.section %}
+            {% when 'mining' %}{% assign sec_title = t.timelapses_section_mining_title %}
+            {% when 'soccer_stadiums' %}{% assign sec_title = t.timelapses_section_soccer_stadiums_title %}
+            {% else %}{% assign sec_title = item.section %}
+          {% endcase %}
+      <section class="em-section">
+        <div class="container">
+          <h2 class="em-section__title">{{ sec_title }}</h2>
+          <div class="em-tile-grid">
+          {% assign last_section = item.section %}
+        {% endif %}
+        {% assign ck = 'timelapses_' | append: item.copy_id %}
+        {% assign title_key = ck | append: '_title' %}
+        {% assign desc_key = ck | append: '_desc' %}
+        <a class="em-tile" href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}timelapses/{{ item.section_slug }}/{{ item.slug }}/">
+          <div class="em-tile__media">
+            <span class="em-tile__badge">{{ sec_title }}</span>
+            <span class="em-tile__play"></span>
           </div>
-          <div class="em-holomap">
-            <iframe
-              class="em-holomap__frame"
-              src="{{ site.baseurl }}/assets/holomaps/brumadinho_cb4_pan10.html"
-              title="{{ t.timelapses_holomap_title }}"
-              loading="lazy"></iframe>
+          <div class="em-tile__body">
+            <h3 class="em-tile__title">{{ t[title_key] }}</h3>
+            <p class="em-tile__desc">{{ t[desc_key] }}</p>
+          </div>
+        </a>
+      {% endfor %}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
     <!-- CONTACT -->
     <section id="contact" class="em-cta">

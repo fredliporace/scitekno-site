@@ -28,26 +28,23 @@
 
 - Pages in root or `_pages/`; layouts in `_layouts/`, partials in `_includes/`,
   structured data in `_data/` (`.yml`/`.yaml`).
-- Production pages live in root; keep markdown content in `.md` files with front matter and
+- Pages live in root; keep markdown content in `.md` files with front matter and
   let Jekyll render it.
 - Use `{% include %}` for header/footer/nav; avoid duplicating markup.
 - Put reusable CSS in `assets/css/main.scss` or the layout, NOT inline per page.
 
-## Experiments now live on separate git branches
+## Experiments live on separate git branches
 
 - Site redesign experiments are developed on their own git branches. When an experiment is
   finished it is merged into `main`. There is no longer an in-repo sandbox/experiment
-  directory structure — all work happens directly against the production source on a branch.
-- Keep the production source (root pages, `_layouts/`, `_includes/`, `_data/locales/`,
-  `assets/css/main.scss`) as the single source of truth; do not add parallel experiment
-  folders, layouts, or locale realms.
+  directory structure — all work happens directly against the site source on a branch.
 
 ## i18n — data-driven, plugin-free (HARD CONSTRAINT)
 
 - All user-facing copy lives in `_data/locales/**/*.yml`, keyed by stable string IDs. Never
   hardcode user-facing text in templates/pages.
-- Templates resolve the production catalog, then `{{ t.key }}`:
-  - Production:
+- Templates resolve the locale catalog, then `{{ t.key }}`:
+  - Catalog:
     `{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}`
 - Per-language routing via front matter:
   - `index.md` → `lang: en`, `permalink: /`
@@ -71,7 +68,7 @@
 - User-facing copy defaults to English with PT-BR translation; Brazilian legal entity in footer.
 - Keep `contact@scitekno.com.br` consistent everywhere.
 - Translation catalogs live under `_data/locales/`, one file per language:
-    `_data/locales/{en,pt-BR}.yml`            production (top level)
+    `_data/locales/{en,pt-BR}.yml`            (top level)
   Keep the two language files in sync. Before committing, run
   `ruby scripts/check-locales` to verify key parity between languages.
 
@@ -91,8 +88,7 @@
 - Validate YAML (`_config.yml`, `_data/*.yml`) and front matter before committing.
 - `bundle exec jekyll build` must be clean (no errors/warnings) before pushing.
 - `markdownlint` on `.md` files (extension installed in devcontainer).
-- Run `ruby scripts/check-locales` to confirm locale key parity for the production realm
-  (top-level `_data/locales/{en,pt-BR}.yml`).
+- Run `ruby scripts/check-locales` to confirm locale key parity (`_data/locales/{en,pt-BR}.yml`).
 - **Before finishing ANY task**, keep markdown warning-free (the VS Code Problems tab must
   show no markdownlint issues in edited files). Run `ruby scripts/lint-markdown` to check, or
   `ruby scripts/lint-markdown --fix` to auto-fix trailing whitespace / blank-line issues, then

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Validate the translation catalogs under _data/locales/**/*.yml.
 #
-# The production site keeps its catalogs at the top level, one file per language:
+# The site keeps its catalogs at the top level, one file per language:
 #   _data/locales/{en,pt-BR}.yml                         production
 #
 # Checks (exit 1 when any fails):
@@ -14,7 +14,7 @@
 #   4. Every defined key is referenced by at least one reachable template of its
 #      realm (unused/dead strings are reported as warnings, non-fatal).
 #
-# The production realm is derived from the catalog directory (top-level
+# The site realm is derived from the catalog directory (top-level
 # _data/locales) plus its source pages + layout:
 #   production -> root *.md pages + _layouts/default.html
 #
@@ -139,9 +139,11 @@ end
 # Build per-realm roots from source pages + layouts.
 realms = []
 realms << {
-  name: 'production',
+  name: 'site',
   catalog_dir: LOCALE_ROOT,
-  roots: Dir[File.join(ROOT, '*.md')] + [File.join(ROOT, '_layouts', 'default.html')],
+  roots: Dir[File.join(ROOT, '*.md')] +
+         Dir[File.join(ROOT, 'timelapses', '**', '*.md')] +
+         [File.join(ROOT, '_layouts', 'default.html')],
 }
 
 realms.each do |realm|

@@ -324,6 +324,7 @@
   border: 1px solid var(--em-line);
   overflow: hidden;
   display: flex; flex-direction: column;
+  color: inherit; text-decoration: none;
   transition: transform .2s ease, border-color .2s ease, background .2s ease;
 }
 .em-tile:hover{ transform: translateY(-4px); border-color: rgba(79,224,201,0.4); background: var(--em-panel-hover); }
@@ -357,6 +358,14 @@
 .em-tile__title{ font-family: var(--em-font-sans); font-weight: 600; font-size: 1.02rem; margin: 0; }
 .em-tile__desc{ color: var(--em-muted); font-size: 0.9rem; line-height: 1.55; margin: 0; }
 
+/* Timelapse card grid on the index page */
+.em-tile-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
 /* ---------- Featured interactive holomap ---------- */
 .em-holomap-layout{
   display: grid;
@@ -370,6 +379,7 @@
   color: var(--em-muted); font-size: 1.02rem; line-height: 1.6;
   margin: 0.9rem 0 0; overflow-wrap: break-word;
 }
+.em-holomap__cta{ margin-top: 1.25rem; }
 .em-holomap{
   border-radius: var(--em-radius);
   background: var(--em-panel);

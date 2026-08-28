@@ -1,0 +1,60 @@
+{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}
+
+
+<div class="em-root">
+
+  {% include nav.html %}
+
+  <main class="em-main">
+
+    <!-- HEADER -->
+    <section class="em-hero">
+      <div class="container">
+        <p class="em-eyebrow">{{ t.timelapses_eyebrow }}</p>
+        <h1 class="em-hero__title">{{ t.timelapses_title }}</h1>
+      </div>
+    </section>
+
+    <!-- DETAIL -->
+    <section class="em-section">
+      <div class="container">
+        {% assign item = site.data.timelapses | where: "copy_id", page.timelapse_id | first %}
+        {% if item %}
+          {% assign ck = 'timelapses_' | append: item.copy_id %}
+          {% assign title_key = ck | append: '_title' %}
+          {% assign desc_key = ck | append: '_desc' %}
+          <div class="em-holomap-layout">
+            <div class="em-holomap__info">
+              <p class="em-eyebrow">{{ t.timelapses_holomap_eyebrow }}</p>
+              <h2 class="em-section__title">{{ t[title_key] }}</h2>
+              <p class="em-holomap__lead">{{ t[desc_key] }}</p>
+              <p class="em-holomap__lead">{{ t.timelapses_instructions }}</p>
+              <div class="em-hero__cta em-holomap__cta">
+                <a href="/{% if page.lang == 'pt-BR' %}pt-BR/{% endif %}timelapses/" class="em-btn em-btn--ghost">{{ t.nav_timelapses }}</a>
+              </div>
+            </div>
+            <div class="em-holomap">
+              <iframe
+                class="em-holomap__frame"
+                src="{{ site.baseurl }}/{{ item.asset }}"
+                title="{{ t[title_key] }}"
+                loading="lazy"></iframe>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="em-cta">
+      <p class="em-eyebrow em-cta__eyebrow">{{ t.cta_eyebrow }}</p>
+      <h2 class="em-cta__title">{{ t.cta_title }}</h2>
+      <p class="em-cta__text">{{ t.cta_text }}</p>
+      <a href="mailto:contact@scitekno.com.br" class="em-btn em-btn--solid">{{ t.hero_cta }}</a>
+    </section>
+
+  </main>
+
+  {% include footer.html %}
+
+</div>

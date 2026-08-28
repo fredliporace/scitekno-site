@@ -6,14 +6,11 @@
   `bundle exec jekyll serve --livereload --host 0.0.0.0 --port 4000` (port 4000 forwarded).
 - Never run `jekyll`/`gem` with `sudo`; use the devcontainer.
 - Do not hand-edit `Gemfile.lock`; regenerate via `bundle install`/`bundle update`.
-- After any plugin/routing/migration change (e.g. swapping the i18n approach, adding the pt-BR
-  route), **restart the server from a clean build**: stop the running server, then run
-  `rm -rf _site` before `bundle exec jekyll serve --livereload --host 0.0.0.0 --port 4000`.
-  Watch-mode regeneration does NOT delete orphaned files from `_site`, so stale output (e.g.
-  leftover localized subdirs from an old i18n setup) can linger and produce wrong URLs or
-  directory listings instead of the page. Because experiment sources now live under
-  `experiments/<name>/`, renaming or moving a sandbox also requires a clean rebuild so stale
-  sandbox output is dropped from `_site`.
+- After any plugin/routing/i18n change, **restart the server from a clean build**: stop the
+  running server, then run `rm -rf _site` before
+  `bundle exec jekyll serve --livereload --host 0.0.0.0 --port 4000`.
+  Watch-mode regeneration does NOT delete orphaned files from `_site`, so stale output can
+  linger and produce wrong URLs or directory listings instead of the page.
 
 ## GitHub Pages / deploy constraints
 
@@ -31,22 +28,27 @@
 
 - Pages in root or `_pages/`; layouts in `_layouts/`, partials in `_includes/`,
   structured data in `_data/` (`.yml`/`.yaml`).
-- Production pages live in root; experiment pages under `experiments/<name>/`.
+- Production pages live in root; keep markdown content in `.md` files with front matter and
+  let Jekyll render it.
 - Use `{% include %}` for header/footer/nav; avoid duplicating markup.
 - Put reusable CSS in `assets/css/main.scss` or the layout, NOT inline per page.
-- Keep markdown content in `.md` files with front matter; let Jekyll render it.
+
+## Experiments now live on separate git branches
+
+- Site redesign experiments are developed on their own git branches. When an experiment is
+  finished it is merged into `main`. There is no longer an in-repo sandbox/experiment
+  directory structure — all work happens directly against the production source on a branch.
+- Keep the production source (root pages, `_layouts/`, `_includes/`, `_data/locales/`,
+  `assets/css/main.scss`) as the single source of truth; do not add parallel experiment
+  folders, layouts, or locale realms.
 
 ## i18n — data-driven, plugin-free (HARD CONSTRAINT)
 
-- All user-facing copy lives in `_data/locales/**/*.yml`, grouped by realm — production at
-  `_data/locales/`, each experiment sandbox at `_data/locales/<sandbox>/` — keyed by stable
-  string IDs. Never hardcode user-facing text in templates/pages.
-- Templates resolve their realm's catalog, then `{{ t.key }}`:
+- All user-facing copy lives in `_data/locales/**/*.yml`, keyed by stable string IDs. Never
+  hardcode user-facing text in templates/pages.
+- Templates resolve the production catalog, then `{{ t.key }}`:
   - Production:
     `{% assign t = site.data.locales[page.lang] | default: site.data.locales[site.default_lang] %}`
-  - Experiment:
-    `{% assign t = site.data.locales["<sandbox>"][page.lang] | default: site.data.locales["<sandbox>"][site.default_lang] %}`
-    (use bracket access for names with hyphens, e.g. `site.data.locales["experiment-modern"]`).
 - Per-language routing via front matter:
   - `index.md` → `lang: en`, `permalink: /`
   - `index.pt-BR.md` → `lang: pt-BR`, `permalink: /pt-BR/`
@@ -68,48 +70,16 @@
 
 - User-facing copy defaults to English with PT-BR translation; Brazilian legal entity in footer.
 - Keep `contact@scitekno.com.br` consistent everywhere.
-- Translation catalogs live under `_data/locales/` and are grouped by realm, one directory per
-  sandbox, with per-language files:
+- Translation catalogs live under `_data/locales/`, one file per language:
     `_data/locales/{en,pt-BR}.yml`            production (top level)
-    `_data/locales/<sandbox>/{en,pt-BR}.yml`  each experiment sandbox
-  Keep the two language files within a realm in sync. Before committing, run
-  `ruby scripts/check-locales` to verify key parity between languages in every realm.
-
-## Experiment isolation
-
-- Each experiment is a self-contained sandbox with a dedicated source folder:
-  - pages in `experiments/<name>/` (filenames still keep the `experiment-` prefix),
-  - partials in `_includes/<name>/` (referenced as `{% include <name>/header.html %}`),
-  - layout `_layouts/<name>.html`,
-  - own catalog dir `_data/locales/<name>/`,
-  - own stylesheet under `assets/css/` (do not reuse production `main.scss`).
-- Each sandbox layout/header must `<link>` **only** that sandbox's own stylesheet
-  (`experiment.scss`, `experiment-modern.scss`) — never production `assets/css/main.scss`.
-- To add an experiment, create in parallel: `experiments/<name>/*.md`,
-  `_includes/<name>/*.html`, `_layouts/<name>.html`,
-  `_data/locales/<name>/{en,pt-BR}.yml`, and `assets/css/<name>.scss`; point the new layout's
-  `<head>` at the new stylesheet, prefix all stable keys with `experiment-<name>_`, then run a
-  clean build and `ruby scripts/check-locales`.
-- All experiment permalinks must use the `experiment-` prefix to keep URLs distinct from
-  production paths (e.g. `/experiment/`, `/experiment-modern/`, `/experiment-timelapses/`,
-  `/experiment-eo-datasets/` plus their `/pt-BR/…` variants).
-- Do not edit production files (`index.md`, `index.pt-BR.md`, `_includes/nav.html`,
-  `_includes/footer.html`, `assets/css/main.scss`, top-level `_data/locales/*.yml`) during
-  experiment work.
-- Translation keys are NOT shared across realms. Each sandbox catalog carries its own copies of
-  any shared strings (nav model, footer, EO stats) under the `experiment-` prefixed names.
-- Only after explicit approval should experiment content be promoted to production: copy the
-  excerpt + its keys into the production catalog, strip the `experiment-` prefix, and move the
-  markup into production partials.
-- All stable string IDs in experiment files must be prefixed (`experiment_*`,
-  `experiment_modern_*`, `experiment_timelapses_*`).
-- Experiment content is validated locally at the prefixed paths (e.g. `/experiment/`).
+  Keep the two language files in sync. Before committing, run
+  `ruby scripts/check-locales` to verify key parity between languages.
 
 ## Assets & links
 
 - Use relative URLs / `{{ site.baseurl }}` so links work under any baseurl or language subpath.
 - Keep Google Fonts `<link>` in the layout `<head>`.
-- Respect `prefers-reduced-motion` for animations (already present in the sandbox stylesheets).
+- Respect `prefers-reduced-motion` for animations.
 - When adding centered content blocks (animations, widgets, hero elements), always use explicit
   centering: `margin: X auto Y` for block elements, or Bootstrap utilities like
   `justify-content-center` / `text-center`. Do not rely on parent container alignment alone
@@ -121,8 +91,8 @@
 - Validate YAML (`_config.yml`, `_data/*.yml`) and front matter before committing.
 - `bundle exec jekyll build` must be clean (no errors/warnings) before pushing.
 - `markdownlint` on `.md` files (extension installed in devcontainer).
-- Run `ruby scripts/check-locales` to confirm locale key parity in every realm (production
-  and each sandbox).
+- Run `ruby scripts/check-locales` to confirm locale key parity for the production realm
+  (top-level `_data/locales/{en,pt-BR}.yml`).
 - **Before finishing ANY task**, keep markdown warning-free (the VS Code Problems tab must
   show no markdownlint issues in edited files). Run `ruby scripts/lint-markdown` to check, or
   `ruby scripts/lint-markdown --fix` to auto-fix trailing whitespace / blank-line issues, then

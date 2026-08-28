@@ -7,6 +7,7 @@ languages:
   - en
   - pt-BR
 default_lang: en
+theme: null
 exclude:
   - scripts
 

@@ -1,11 +1,8 @@
 #!/usr/bin/env ruby
 # Validate the translation catalogs under _data/locales/**/*.yml.
 #
-# Catalogs are grouped by directory, where each directory holds the language
-# variants for one "realm" (production or an experiment sandbox):
+# The site keeps its catalogs at the top level, one file per language:
 #   _data/locales/{en,pt-BR}.yml                         production
-#   _data/locales/experiment/{en,pt-BR}.yml              experiment sandbox
-#   _data/locales/experiment-modern/{en,pt-BR}.yml       experiment-modern sandbox
 #
 # Checks (exit 1 when any fails):
 #   1. Within each directory group, all language catalogs expose the same
@@ -17,11 +14,9 @@
 #   4. Every defined key is referenced by at least one reachable template of its
 #      realm (unused/dead strings are reported as warnings, non-fatal).
 #
-# A realm is derived from the catalog directory + source layout/page location:
-#   production        -> root *.md pages + _layouts/default.html
-#   experiment        -> experiments/experiment/*.md + _layouts/experiment.html
-#   experiment-modern -> experiments/experiment-modern/*.md + _layouts/experiment-modern.html
-#   (any extra experiments/<name>/ dir is handled generically)
+# The site realm is derived from the catalog directory (top-level
+# _data/locales) plus its source pages + layout:
+#   production -> root *.md pages + _layouts/default.html
 #
 # Dynamic, data-driven references (galleries that loop over _data/*.yml and build
 # keys with `| append`) are expanded from the data files and counted as used.
@@ -46,10 +41,10 @@ end
 
 # Expand data-driven, dynamic locale-key references like:
 #   {% for item in site.data.timelapses %}
-#     {% assign ck = 'experiment_timelapses_'  | append: item.copy_id %}
-#     {% assign title_key = ck | append: '_title' %}
-#     {{ t[title_key] }}
-# into concrete keys (e.g. `experiment_timelapses_item_1_title`). Fail-safe:
+#   {% assign ck = 'timelapses_'  | append: item.copy_id %}
+#   {% assign title_key = ck | append: '_title' %}
+#   {{ t[title_key] }}
+# into concrete keys (e.g. `timelapses_item_1_title`). Fail-safe:
 # idioms we can't parse are simply ignored.
 def dynamic_used_keys(content)
   used = {}
@@ -144,19 +139,12 @@ end
 # Build per-realm roots from source pages + layouts.
 realms = []
 realms << {
-  name: 'production',
+  name: 'site',
   catalog_dir: LOCALE_ROOT,
-  roots: Dir[File.join(ROOT, '*.md')] + [File.join(ROOT, '_layouts', 'default.html')],
+  roots: Dir[File.join(ROOT, '*.md')] +
+         Dir[File.join(ROOT, 'timelapses', '**', '*.md')] +
+         [File.join(ROOT, '_layouts', 'default.html')],
 }
-Dir[File.join(ROOT, 'experiments', '*')].sort.each do |d|
-  next unless File.directory?(d)
-  name = File.basename(d)
-  realms << {
-    name: name,
-    catalog_dir: File.join(LOCALE_ROOT, name),
-    roots: Dir[File.join(d, '*.md')] + [File.join(ROOT, '_layouts', "#{name}.html")],
-  }
-end
 
 realms.each do |realm|
   group = group_data[realm[:catalog_dir]]

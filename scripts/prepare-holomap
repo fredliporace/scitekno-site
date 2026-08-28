@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+# Prepare an exported HoloMap HTML file for publication on the SCITEKNO site.
+#
+# Panel/HoloMap exports (e.g. `video_holomap_pansharpened.html`) ship with a light UI.
+# This script applies the site's presentation fixes so the embed matches the dark
+# SCITEKNO theme, mirroring what was already done for
+# `assets/holomaps/brumadinho_cb4_pan10.html`:
+#   1. Dark background + text color on <html>/<body>.
+#   2. Dark Bokeh toolbar background.
+#   3. A shadow-DOM style fix (`data-scitekno-fix`) for the Bokeh slider, polled until
+#      the widgets mount.
+#
+# Usage: ruby scripts/prepare-holomap <input.html> <output.html>
+#
+# Idempotent: re-running on an already-prepared file is a no-op (no duplicated fixes).
+
+abort "Usage: ruby scripts/prepare-holomap <input.html> <output.html>" if ARGV.size < 2
+
+input, output = ARGV[0], ARGV[1]
+abort "Input not found: #{input}" unless File.file?(input)
+
+html = File.read(input)
+
+# 1 + 2: dark theme inside the <style> block.
+unless html.include?('background-color: #0A1120;')
+  html.sub!(/padding: 0;\s*\}\s*<\/style>/m,
+    "padding: 0;\n        background-color: #0A1120;\n        color: #EAF0FB;\n      }\n" \
+    "      .bk-toolbar {\n        background: #0A1120 !important;\n      }\n    </style>")
+end
+
+# 3: shadow-DOM slider fix, appended before </body>.
+SCITEKNO_FIX = <<~'JS'
+    <script>
+      (function() {
+        const styleText = ':host{--panel-background-color:#0A1120;--panel-on-background-color:#FFFFFF}.bk-slider,.bk-slider *{background:#0A1120 !important;color:#FFFFFF !important}';
+        function injectInto(el) {
+          if (el.shadowRoot) {
+            let style = el.shadowRoot.querySelector('style[data-scitekno-fix]');
+            if (!style) {
+              style = document.createElement('style');
+              style.setAttribute('data-scitekno-fix', '');
+              style.textContent = styleText;
+              el.shadowRoot.appendChild(style);
+            }
+          }
+        }
+        function walkAndInject(root) {
+          injectInto(root);
+          if (root.shadowRoot) Array.from(root.shadowRoot.children).forEach(walkAndInject);
+          Array.from(root.children).forEach(walkAndInject);
+        }
+        setInterval(() => document.querySelectorAll('.bk-Row').forEach(walkAndInject), 500);
+      })();
+    </script>
+JS
+
+unless html.include?('data-scitekno-fix')
+  html.sub!(/<\/body>/, SCITEKNO_FIX + "</body>")
+end
+
+File.write(output, html)
+puts "Wrote #{output}"

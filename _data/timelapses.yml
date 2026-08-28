@@ -1,32 +1,24 @@
-# Structured data for the experiment-timelapses topics page.
+# Timelapses index — sections and items.
 #
-# `copy_id` maps to locale keys (experiment_timelapses_<copy_id>_title / _desc)
-# so all user-facing copy stays centralized in _data/locales/*.yml.
-# `sensor` and `duration` are shown as technical metadata.
-# `c1`/`c2` are placeholder gradient colors for the demo thumbnail SVG; replace
-# the SVG block in experiment-timelapses-content.html with a real <video>/image
-# element when you have actual assets.
+# Flat list; the index page groups items by `section` (Liquid `group_by`).
+# `section` is an underscore id used for grouping and as the locale-key suffix
+# (timelapses_section_<section>_title). `section_slug` is the URL path segment
+# (may contain hyphens). `slug` is the per-item URL segment.
+#
+# Per-item copy is data-driven via the check-locales idiom:
+#   timelapses_<copy_id>_title / timelapses_<copy_id>_desc
+# defined in _data/locales/{en,pt-BR}.yml.
 
-- copy_id: "item_1"
-  sensor: CBERS-4A
-  duration: "00:32"
-  c1: "#0B1526"
-  c2: "#2C5E8C"
+- copy_id: brumadinho
+  section: mining
+  section_slug: mining
+  slug: brumadinho
+  type: holomap
+  asset: assets/holomaps/brumadinho_cb4_pan10.html
 
-- copy_id: "item_2"
-  sensor: CBERS-4A
-  duration: "00:47"
-  c1: "#221A45"
-  c2: "#7A3E6E"
-
-- copy_id: "item_3"
-  sensor: Amazonia-1
-  duration: "01:08"
-  c1: "#0D2818"
-  c2: "#1E6B4F"
-
-- copy_id: "item_4"
-  sensor: CBERS-4
-  duration: "00:53"
-  c1: "#10131F"
-  c2: "#6E2C2C"
+- copy_id: arena_baixada
+  section: soccer_stadiums
+  section_slug: soccer-stadiums
+  slug: arena-baixada
+  type: holomap
+  asset: assets/holomaps/arena_baixada_cb4_pan10.html

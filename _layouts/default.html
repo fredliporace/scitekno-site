@@ -9,7 +9,16 @@
 {{ content }}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script data-goatcounter="https://scitekno.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+<script>
+  (function () {
+    var allowed = ["scitekno.com.br", "www.scitekno.com.br"];
+    if (allowed.indexOf(window.location.hostname) === -1) return;
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "//gc.zgo.at/count.js";
+    s.setAttribute("data-goatcounter", "https://scitekno.goatcounter.com/count");
+    document.body.appendChild(s);
+  })();
+</script>
 </body>
 </html>

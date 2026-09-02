@@ -1,0 +1,97 @@
+#!/usr/bin/env ruby
+# Generate per-timelapse detail pages from _data/timelapses.yml.
+#
+# For each item in the timelapses data file, creates (or overwrites) the English
+# and Portuguese detail pages:
+#   timelapses/<section_slug>/<slug>.md          (en)
+#   timelapses/<section_slug>/<slug>.pt-BR.md     (pt-BR)
+#
+# Pages are data-driven: the front matter title and description are derived from
+# the locale catalogs using the convention
+#   timelapses_<copy_id>_title  /  timelapses_<copy_id>_desc
+# so adding a new item to _data/timelapses.yml (with matching locale keys and an
+# asset) is all that is needed — run this script, then build.
+#
+# Usage: ruby scripts/generate-timelapse-pages
+require 'yaml'
+
+ROOT = File.expand_path('..', __dir__)
+DATA_FILE = File.join(ROOT, '_data', 'timelapses.yml')
+LOCALE_DIR = File.join(ROOT, '_data', 'locales')
+TIMELAPSES_DIR = File.join(ROOT, 'timelapses')
+
+abort "Usage: ruby scripts/generate-timelapse-pages" unless ARGV.empty?
+
+items = YAML.load_file(DATA_FILE) || []
+abort "#{DATA_FILE}: no timelapse items" if items.empty?
+
+locales = {}
+%w[en pt-BR].each do |lang|
+  path = File.join(LOCALE_DIR, "#{lang}.yml")
+  abort "Locale file not found: #{path}" unless File.file?(path)
+  locales[lang] = YAML.load_file(path) || {}
+end
+
+def quote_yaml(str)
+  escaped = str.to_s.strip
+                 .gsub('\\', '\\\\')
+                 .gsub('"', '\\"')
+                 .gsub("\n", '\\n')
+  "\"#{escaped}\""
+end
+
+generated = 0
+items.each do |item|
+  copy_id = item['copy_id']
+  section_slug = item['section_slug']
+  slug = item['slug']
+
+  abort "timelapses.yml: item missing 'copy_id': #{item.inspect}" unless copy_id
+  abort "timelapses.yml: item '#{copy_id}' missing 'section_slug'" unless section_slug
+  abort "timelapses.yml: item '#{copy_id}' missing 'slug'" unless slug
+
+  dir = File.join(TIMELAPSES_DIR, section_slug)
+  Dir.mkdir(dir) unless Dir.exist?(dir)
+
+  %w[en pt-BR].each do |lang|
+    title_key = "timelapses_#{copy_id}_title"
+    desc_key = "timelapses_#{copy_id}_desc"
+
+    locale = locales[lang]
+    title = locale[title_key]
+    desc = locale[desc_key]
+
+    abort "locales/#{lang}.yml: missing key '#{title_key}' for timelapse '#{copy_id}'" unless title
+    abort "locales/#{lang}.yml: missing key '#{desc_key}' for timelapse '#{copy_id}'" unless desc
+
+    permalink = if lang == 'pt-BR'
+                  "/pt-BR/timelapses/#{section_slug}/#{slug}/"
+                else
+                  "/timelapses/#{section_slug}/#{slug}/"
+                end
+
+    front_title = "SCITEKNO — #{title.strip}"
+    front_desc = desc.strip
+
+    filename = lang == 'pt-BR' ? "#{slug}.pt-BR.md" : "#{slug}.md"
+    out = File.join(dir, filename)
+
+    content = <<~FRONTMATTER
+    ---
+    layout: default
+    lang: #{lang}
+    permalink: #{permalink}
+    timelapse_id: #{copy_id}
+    title: #{quote_yaml(front_title)}
+    description: #{quote_yaml(front_desc)}
+    ---
+    {% include timelapse-detail.html %}
+    FRONTMATTER
+
+    File.write(out, content)
+    puts "Generated #{out.sub("#{ROOT}/", '')}"
+    generated += 1
+  end
+end
+
+puts "#{generated} page(s) generated from #{items.size} timelapse item(s)."

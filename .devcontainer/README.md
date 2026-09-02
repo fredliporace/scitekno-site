@@ -54,8 +54,16 @@ The Timelapses area is data-driven so content can grow without touching template
 1. Add/adjust the item in `_data/timelapses.yml` (and a `section` entry if it is new).
 2. Add the matching `timelapses_<copy_id>_title` / `_desc` keys in both locale files, plus a
    `timelapses_section_<section>_title` key if the section is new.
-3. Create the detail page(s): `timelapses/<section_slug>/<slug>.md` and its `.pt-BR.md` twin,
-   setting `timelapse_id` to the item's `copy_id`.
+3. Generate the detail page(s):
+
+   ```bash
+   ruby scripts/generate-timelapse-pages
+   ```
+
+   This creates `timelapses/<section_slug>/<slug>.md` (en) and `.pt-BR.md` for every
+   item in `_data/timelapses.yml`, setting `timelapse_id` to the item's `copy_id`,
+   permalinks to `/timelapses/<section_slug>/<slug>/` (and `/pt-BR/...`), and
+   front matter `title`/`description` derived from the locale catalogs.
 4. Run `ruby scripts/check-locales` to confirm key parity, then
    `bundle exec jekyll build` (clean build: `rm -rf _site` first after routing/data changes).
 

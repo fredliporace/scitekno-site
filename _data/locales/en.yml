@@ -29,6 +29,8 @@ timelapses_brumadinho_title: "Brumadinho · CBERS-4 PAN10M"
 timelapses_brumadinho_desc: "A multi-year interactive view of the Brumadinho dam from CBERS-4 PAN10 imagery. The dam collapsed in January 2019."
 timelapses_arena_baixada_title: "Arena da Baixada · CBERS-4A WPM"
 timelapses_arena_baixada_desc: "Arena da Baixada (Curitiba-PR) from CBERS-4A WPM XS-PANSHARPENED imagery."
+timelapses_maracana_title: "Maracana · CBERS-4A WPM "
+timelapses_maracana_desc: "Maracana (Rio de Janeiro-RJ) from CBERS-4A WPM XS-PANSHARPENED imagery."
 timelapses_instructions: "Drag the timeline slider to step through each scene."
 
 more_title: "Go deeper"

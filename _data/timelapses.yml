@@ -16,6 +16,14 @@
   type: holomap
   asset: assets/holomaps/brumadinho_cb4_pan10.html
 
+- copy_id: maracana
+  section: soccer_stadiums
+  section_slug: soccer-stadiums
+  slug: maracana
+  type: holomap
+  asset: assets/holomaps/maracana_cb4a_wpm.html
+
+
 - copy_id: arena_baixada
   section: soccer_stadiums
   section_slug: soccer-stadiums

@@ -2,6 +2,9 @@
 
 ## Build & preview
 
+- Before serving the pages with jekyll check if the server is already
+  running with `ps aux | grep jekyll`. If the server is running then use port 4000 to check
+  the current site status, do not restart the jekyll server.
 - Always use Bundler: `bundle install`, then
   `bundle exec jekyll serve --livereload --host 0.0.0.0 --port 4000` (port 4000 forwarded).
 - Never run `jekyll`/`gem` with `sudo`; use the devcontainer.

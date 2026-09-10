@@ -23,10 +23,16 @@
   type: holomap
   asset: assets/holomaps/maracana_cb4a_wpm.html
 
-
 - copy_id: arena_baixada
   section: soccer_stadiums
   section_slug: soccer-stadiums
   slug: arena-baixada
   type: holomap
   asset: assets/holomaps/arena_baixada_cb4a_wpm.html
+
+- copy_id: arena_mrv
+  section: soccer_stadiums
+  section_slug: soccer-stadiums
+  slug: arena-mrv
+  type: holomap
+  asset: assets/holomaps/arena_mrv_cb4a_wpm.html

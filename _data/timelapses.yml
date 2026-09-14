@@ -36,3 +36,10 @@
   slug: arena-mrv
   type: holomap
   asset: assets/holomaps/arena_mrv_cb4a_wpm.html
+
+- copy_id: vicente_lopez_platense
+  section: soccer_stadiums
+  section_slug: soccer-stadiums
+  slug: vicente-lopez-platense
+  type: holomap
+  asset: assets/holomaps/vicente_lopez_platense_cb4a_wpm.html

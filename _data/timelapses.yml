@@ -37,6 +37,13 @@
   type: holomap
   asset: assets/holomaps/arena_mrv_cb4a_wpm.html
 
+- copy_id: neoquimica_arena
+  section: soccer_stadiums
+  section_slug: soccer-stadiums
+  slug: neoquimica-arena
+  type: holomap
+  asset: assets/holomaps/neoquimica_arena_cb4a_wpm.html
+
 - copy_id: vicente_lopez_platense
   section: soccer_stadiums
   section_slug: soccer-stadiums
